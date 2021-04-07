@@ -272,7 +272,7 @@ public class LevelCreation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(player.position.position.x > rooms.Last.Value.basePosition.x + 0.5f * rooms.Last.Value.width)
+        if(player.playerPosition.position.x > rooms.Last.Value.basePosition.x + 0.5f * rooms.Last.Value.width)
         {
             currentRoom++;
             newMapBase = new Vector2Int(rooms.Last.Value.basePosition.x + rooms.Last.Value.width, rooms.Last.Value.basePosition.y);

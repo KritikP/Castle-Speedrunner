@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Player Data", order = 51)]
-[SerializeField]
 public class Player_Data : ScriptableObject
 {
     [SerializeField] public int     maxHealth = 100;
@@ -16,6 +15,6 @@ public class Player_Data : ScriptableObject
     [SerializeField] public float   rollSpeed = 10f;
     [SerializeField] public float   fallMultiplier = 1f;
     [SerializeField] public float   variableJumpMultiplier = 2f;
-    public Transform                position;
-    [SerializeField] public MapSection map1;
+    public Transform                playerPosition;
+
 }
