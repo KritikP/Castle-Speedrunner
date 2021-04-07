@@ -10,13 +10,13 @@ public class LevelCreation : MonoBehaviour
     private Tilemap backgroundDecorationTilemap;
 
     private LinkedList<MapSection> rooms;
-    [SerializeField] private Player_State player;
+    [SerializeField] private Player_Data player;
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private int minPlatformLength = 2;
     [SerializeField] private int maxPlatformLength = 5;
     [SerializeField] private Vector2Int startingPosition;
-    //[SerializeField] private int seed;
+    [SerializeField] private TileObjectsList foregroundTiles;
     private int currentRoom;
 
     private Vector2Int newMapBase;
@@ -53,34 +53,34 @@ public class LevelCreation : MonoBehaviour
 
         //Top tiles
         //Top left corner
-        map.mapArray[0, 0] = 67;
-        map.mapArray[0, 1] = 10;
-        map.mapArray[1, 0] = 12;
-        map.mapArray[1, 1] = 246;
+        map.SetTile(0, height - 1, 67);
+        map.SetTile(1, height - 1, 10);
+        map.SetTile(0, height - 2, 12);
+        map.SetTile(1, height - 2, 246);
 
         tileNum = 11;
         for (int c = 2; c < width - 2; c++)
         {
-            map.mapArray[0, c] = tileNum;
-            map.mapArray[1, c] = tileNum + 59;
+            map.SetTile(c, height - 1, tileNum);
+            map.SetTile(c, height - 2, tileNum + 59);
             tileNum++;
             if (tileNum > 20)
                 tileNum = 10;
         }
 
         //Top right corner
-        map.mapArray[0, width - 1] = 82;
-        map.mapArray[0, width - 2] = 21;
-        map.mapArray[1, width - 1] = 20;
-        map.mapArray[1, width - 2] = 249;
+        map.SetTile(width - 1, height - 1, 82);
+        map.SetTile(width - 2, height - 1, 21);
+        map.SetTile(width - 1, height - 2, 20);
+        map.SetTile(width - 2, height - 2, 249);
 
         tileNum = 0;
-        for (int r = 2; r < height - 2; r++)
+        for (int r = height - 3; r > 1; r--)
         {
-            map.mapArray[r, 0] = spikeRoomLeft[tileNum];
-            map.mapArray[r, 1] = spikeRoomLeft[tileNum] + 1;
-            map.mapArray[r, width - 2] = spikeRoomRight[tileNum];
-            map.mapArray[r, width - 1] = spikeRoomRight[tileNum] + 1;
+            map.SetTile(0, r, spikeRoomLeft[tileNum]);
+            map.SetTile(1, r, spikeRoomLeft[tileNum] + 1);
+            map.SetTile(width - 2, r, spikeRoomRight[tileNum]);
+            map.SetTile(width - 1, r, spikeRoomRight[tileNum] + 1);
             tileNum++;
             if (tileNum > 7)
                 tileNum = 0;
@@ -89,24 +89,24 @@ public class LevelCreation : MonoBehaviour
         tileNum = 579;
         for (int c = 2; c < width - 2; c++)
         {
-            map.mapArray[height - 2, c] = tileNum;
-            map.mapArray[height - 1, c] = tileNum + 33;
+            map.SetTile(c, 1, tileNum);
+            map.SetTile(c, 0, tileNum + 33);
             tileNum++;
             if (tileNum > 592)
                 tileNum = 579;
         }
 
         //Bottom Left Corner
-        map.mapArray[height - 2, 0] = 576;
-        map.mapArray[height - 1, 0] = 609;
-        map.mapArray[height - 2, 1] = 577;
-        map.mapArray[height - 1, 1] = 610;
+        map.SetTile(0, 1, 576);
+        map.SetTile(0, 0, 609);
+        map.SetTile(1, 1, 577);
+        map.SetTile(1, 0, 610);
 
         //Bottom Right Corner
-        map.mapArray[height - 2, width - 2] = 594;
-        map.mapArray[height - 2, width - 1] = 595;
-        map.mapArray[height - 1, width - 2] = 627;
-        map.mapArray[height - 1, width - 1] = 628;
+        map.SetTile(width - 2, 1, 594);
+        map.SetTile(width - 1, 1, 595);
+        map.SetTile(width - 2, 0, 627);
+        map.SetTile(width - 1, 0, 628);
     }
 
     private void EndlessRunnerSection(MapSection map)
@@ -165,14 +165,14 @@ public class LevelCreation : MonoBehaviour
 
             if (validPoints.Count == 0) //Reached end of section
             {
-                Debug.Log("Reached end of section");
+                //Debug.Log("Reached end of section");
                 break;
             }
             selectedPoint = rand.Next(numPoints / skipPointsFrac, validPoints.Count + (numPoints / skipPointsFrac));
             point = trajectories[platformCount].points[selectedPoint];
 
             col = Mathf.FloorToInt(point.x - map.basePosition.x);
-            row = (map.height - 1) - (Mathf.FloorToInt(point.y - 1) - map.basePosition.y);
+            row = Mathf.FloorToInt(point.y - 1) - map.basePosition.y;
 
             /*
             Debug.Log("Selected Point " + selectedPoint + ": " + trajectories[platformCount].points[selectedPoint]);
@@ -186,19 +186,21 @@ public class LevelCreation : MonoBehaviour
                 platformLength = (width - 2) - col;
             else
                 platformLength = rand.Next(minPlatformLength, maxPlatformLength + 1);
+
             //Debug.Log("Number of platforms generating: " + platformLength);
             for (int i = 0; i < platformLength - 1; i++)
             {
-                map.mapArray[row, col + i] = platformTile;
+                map.SetTile(col + i, row, platformTile);
+                //Debug.Log("Set tile at " + (col + i) + ", " + row + " to " + platformTile);
                 platformTile++;
                 if (platformTile > 58)
                     platformTile = 53;
             }
 
             if (platformLength != 1)
-                map.mapArray[row, col + platformLength - 1] = 59;
+                map.SetTile(col + platformLength - 1, row, 59);
             else if (platformLength == 1)
-                map.mapArray[row, col + platformLength - 1] = 52;
+                map.SetTile(col + platformLength - 1, row, 52);
 
             pathPos.x = col + platformLength - 1 + map.basePosition.x;
             pathPos.y = Mathf.FloorToInt(point.y - 1);
@@ -218,28 +220,24 @@ public class LevelCreation : MonoBehaviour
         int width = map.width;
         int height = map.height;
         Tile tile;
-        Vector2Int newTilePosition = map.basePosition;
-        for (int r = height - 1; r >= 0; r--)
+        for(int x = 0; x < width; x++)
         {
-            for (int c = 0; c < width; c++)
+            for(int y = 0; y < height; y++)
             {
-                if(map.mapArray[r, c] != 0)
+                if(map.mapArray[y * width + x] != 0)
                 {
-                    tile = Resources.Load<Tile>("Tiles/Castle_Tiles/main_lev_build_" + map.mapArray[r, c]);
+                    tile = Resources.Load<Tile>("Tiles/Castle_Tiles/main_lev_build_" + map.mapArray[y * width + x]);
                     if (tile == null)
                     {
                         //Debug.Log("Tile " + map.mapArray[r, c] + " not found at " + newTilePosition.x + " ," + newTilePosition.y + " ," + newTilePosition.z);
                     }
                     else
                     {
-                        tilemap.SetTile(new Vector3Int(newTilePosition.x, newTilePosition.y, 0), tile);
-                        //Debug.Log("Tile loaded at " + newTilePosition.x + " ," + newTilePosition.y + " ,");
+                        tilemap.SetTile(new Vector3Int(map.basePosition.x + x, map.basePosition.y + y, 0), tile);
+                        //Debug.Log("Tile " + map.GetTile(x, y) + "loaded at " + x + " ," + y + " ,");
                     }
                 }
-                newTilePosition.x = newTilePosition.x + 1;
             }
-            newTilePosition.x = map.basePosition.x;
-            newTilePosition.y = newTilePosition.y + 1;
         }
     }
 

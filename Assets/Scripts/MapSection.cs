@@ -6,7 +6,7 @@ public class MapSection
 {
     public int width { get; }
     public int height { get; }
-    public int[,] mapArray { get; set; }
+    public int[] mapArray { get; set; }
     public Vector2Int basePosition { get; set; }
     public Vector2Int entrance {get; set; }
     public Vector2Int exit {get; set; }
@@ -24,8 +24,19 @@ public class MapSection
         this.basePosition = basePosition;
         width = w;
         height = h;
-        mapArray = new int[h, w];
+        mapArray = new int[width * height];
         ent = 'w';
         ext = 'e';
     }
+
+    public void SetTile(int x, int y, int tileValue)
+    {
+        mapArray[y * width + x] = tileValue;
+    }
+
+    public int GetTile(int x, int y)
+    {
+        return mapArray[y * width + x];
+    }
+
 }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20f74765105c2934c82e4de50208604f, type: 3}
+  m_Name: PlayerState
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  health: 100
+  invincible: 0
+  invincibilityTime: 1
+  attackDamage: 20
+  speed: 7
+  jumpSpeed: 8
+  rollSpeed: 10
+  fallMultiplier: 2
+  variableJumpMultiplier: 2
+  position: {fileID: 0}
