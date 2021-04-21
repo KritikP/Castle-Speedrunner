@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e076d4d017357d4dbe66f90f873fc04, type: 3}
   m_Name: arch_6
   m_EditorClassIdentifier: 
-  width: 0
-  height: 0
-  tileNums: 
+  width: 2
+  height: 3
+  tileNums: f0050000f1050000d5050000d6050000ba050000bb050000
+  chisel: 
+  isGrounded: 0
+  hasGlow: 1
+  glow: {r: 0, g: 1, b: 1, a: 1}
+  colorScheme: 3
+  palette: 1

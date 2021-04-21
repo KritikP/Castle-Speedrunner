@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 20f74765105c2934c82e4de50208604f, type: 3}
-  m_Name: PlayerState
+  m_Name: PlayerData
   m_EditorClassIdentifier: 
   maxHealth: 100
   health: 100
@@ -22,4 +22,4 @@ MonoBehaviour:
   rollSpeed: 10
   fallMultiplier: 2
   variableJumpMultiplier: 2
-  position: {fileID: 0}
+  playerPosition: {fileID: 0}

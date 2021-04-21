@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e076d4d017357d4dbe66f90f873fc04, type: 3}
-  m_Name: arch_2
+  m_Name: shelf_2
   m_EditorClassIdentifier: 
   width: 2
-  height: 3
-  tileNums: 3e0100003f0100001301000014010000ef000000f0000000
-  chisel: 010101010000
-  isGrounded: 0
+  height: 4
+  tileNums: bc000000bd000000ae000000af0000009e0000009f0000008d0000008e000000
+  chisel: 
+  isGrounded: 1
   hasGlow: 0
   glow: {r: 0, g: 0, b: 0, a: 0}
-  colorScheme: 1
-  palette: 1
+  colorScheme: 0
+  palette: 2
