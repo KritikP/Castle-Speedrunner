@@ -20,8 +20,10 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private int maxPlatformLength = 5;
     [SerializeField] private Vector2Int startingPosition;
 
+    private int entrancePlatformLength = 4;
     private int currentRoom;
     private Vector2Int newMapBase;
+    private Vector2Int newMapEntrance;
     private System.Random rand = new System.Random();
 
     private int[] background1a = {357, 331, 300, 262, 221, 176, 135};
@@ -115,6 +117,23 @@ public class LevelCreation : MonoBehaviour
         map.SetTile(width - 2, 0, 627, map.mapArray);
         map.SetTile(width - 1, 0, 628, map.mapArray);
 
+        //Chisel the entrance area
+        if (currentRoom != 0)
+        {
+            for(int x = 2; x > 0; x--)
+            {
+                for(int y = map.entrance.y; y < map.entrance.y + 6; y++)
+                {
+                    map.SetTile(x, y, -1, map.mapArray);
+                    map.SetTile(x - 1, y, -1, map.mapArray);
+                }
+            }
+            map.SetTile(1, map.entrance.y, 593, map.mapArray);
+            map.SetTile(1, map.entrance.y + 5, 290, map.mapArray);
+            map.SetTile(0, map.entrance.y, 1092, map.mapArray);
+            map.SetTile(0, map.entrance.y + 5, 1092, map.mapArray);
+        }
+
         GenerateBackground(map);
         EndlessRunnerSection(map);
         SpikeFloor(map);
@@ -131,16 +150,15 @@ public class LevelCreation : MonoBehaviour
     private void EndlessRunnerSection(MapSection map)
     {
         //Debug.Log("Creating room " + currentRoom);
-        int platformTile = 52;
+        int platformTile = 56;
 
         List<Trajectory> trajectories = new List<Trajectory>();
-        int width = map.width;
-        int height = map.height;
+        width = map.width;
+        height = map.height;
 
         //Generating platforms
         
-        Vector2Int pathPos = new Vector2Int(map.entrance.x, map.entrance.y);           //Start of generation
-
+        Vector2Int pathPos = new Vector2Int(map.entrance.x + map.basePosition.x, map.entrance.y + map.basePosition.y);           //Start of generation
         int numPoints = 0;
         Vector2 point = Vector2.zero;
         int col = 0;
@@ -152,6 +170,15 @@ public class LevelCreation : MonoBehaviour
         int platformCount = 0;
         List<int> validPoints = new List<int>();
 
+        for (int i = 0; i < entrancePlatformLength; i++)
+        {
+            //Debug.Log("Initial " + i + " platform at" + pathPos);
+            map.SetTile(pathPos.x - map.basePosition.x, pathPos.y - map.basePosition.y, platformTile + i, map.mapArray);
+            //Debug.Log(map.GetTile(pathPos.x - map.basePosition.x, pathPos.y - map.basePosition.y, map.mapArray));
+            pathPos.x = pathPos.x + 1;
+        }
+
+        platformTile = 52;
         while (pathPos.x < map.basePosition.x + width && platformCount < 20)       //While the generation hasn't reached the end of the map section
         {
             //Debug.Log("Platform: " + platformCount);
@@ -217,9 +244,30 @@ public class LevelCreation : MonoBehaviour
             platformCount++;
             validPoints.Clear();
         }
-        Debug.Log("Runner room complete, final path pos at: " + pathPos);
-        map.exit = new Vector2Int(pathPos.x, pathPos.y + 1);
+        Debug.Log("Platforms complete, final path pos at: " + pathPos);
+        map.exit = new Vector2Int(pathPos.x - map.basePosition.x, pathPos.y - map.basePosition.y);
 
+        //Chisel and set exit area
+        map.SetTile(width - 2, pathPos.y - map.basePosition.y, 578, map.mapArray);
+        map.SetTile(width - 2, pathPos.y - map.basePosition.y + 5, 291, map.mapArray);
+        map.SetTile(width - 1, pathPos.y - map.basePosition.y, 1089, map.mapArray);
+        map.SetTile(width - 1, pathPos.y - map.basePosition.y + 5, 1089, map.mapArray);
+        for(int i = 1; i < 5; i++)
+        {
+            map.SetTile(map.width - 2, pathPos.y + i, -1, map.mapArray);
+            map.SetTile(map.width - 1, pathPos.y + i, -1, map.mapArray);
+        }
+    }
+
+    private void TransitionArea(MapSection map)
+    {
+        GenerateBackground(map);
+        int glowTile = 1090;
+        for(int i = 0; i < map.width; i++)
+        {
+            map.SetTile(map.entrance.x + i, map.entrance.y, glowTile, map.mapArray);
+            map.SetTile(map.entrance.x + i, map.entrance.y + 5, glowTile, map.mapArray);
+        }
     }
 
     private void DecorateBackground(MapSection map)
@@ -292,9 +340,8 @@ public class LevelCreation : MonoBehaviour
         //Add first section to map
         maps.AddLast(new MapSection(height, width, startingPosition));
 
-        maps.Last.Value.entrance = new Vector2Int(maps.Last.Value.basePosition.x + 2, maps.Last.Value.basePosition.y + (int)(0.3f * maps.Last.Value.height));
+        maps.Last.Value.entrance = new Vector2Int(2, (int)(0.3f * maps.Last.Value.height));
         currentRoom = 0;
-
         //Perform first set of generations
         SpikeRoom(maps.Last.Value);
         RenderMap(maps.Last.Value);
@@ -321,9 +368,17 @@ public class LevelCreation : MonoBehaviour
         if (player.playerPosition.position.x > maps.Last.Value.basePosition.x + 0.5f * maps.Last.Value.width)
         {
             currentRoom++;
+
             newMapBase = new Vector2Int(maps.Last.Value.basePosition.x + maps.Last.Value.width, maps.Last.Value.basePosition.y);
+            newMapEntrance = new Vector2Int(2, maps.Last.Value.exit.y);
+
+            maps.AddLast(new MapSection(height, 2, newMapBase));
+
             Debug.Log("New map section with base position: " + newMapBase);
             maps.AddLast(new MapSection(height, width, newMapBase));
+
+            maps.Last.Value.entrance = newMapEntrance;
+
             SpikeRoom(maps.Last.Value);
             RenderMap(maps.Last.Value);
         }
