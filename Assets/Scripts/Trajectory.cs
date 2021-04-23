@@ -11,7 +11,7 @@ public class Trajectory
     public float maxFallTime;
     public Vector2[] points;
     public float maxTime = 2f;          //Total time to record trajectory data
-    public float timeStep = 0.2f;       //Time interval between data points
+    public float timeStep = 0.1f;       //Time interval between data points
     public int numPoints;               //Number of points in trajectory
     public int belowStartPoint;          //First point that goes below the start position
 

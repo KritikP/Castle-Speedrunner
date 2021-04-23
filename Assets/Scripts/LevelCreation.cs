@@ -8,8 +8,9 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private Tilemap groundTilemap;
     [SerializeField] private Tilemap backgroundTilemap;
     [SerializeField] private Tilemap backgroundDecorationTilemap;
-
-    private LinkedList<MapSection> maps;
+    [SerializeField] private Map_Data mapData;
+    
+    private List<MapSection> maps;
 
     [SerializeField] private Player_Data player;
     [SerializeField] private TileObjectsList tileObjects;
@@ -19,7 +20,7 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private int minPlatformLength = 2;
     [SerializeField] private int maxPlatformLength = 5;
     [SerializeField] private Vector2Int startingPosition;
-
+    
     private int entrancePlatformLength = 4;
     private int currentRoom;
     private Vector2Int newMapBase;
@@ -30,6 +31,9 @@ public class LevelCreation : MonoBehaviour
     private int[] background1b = {230, 185, 144};
     private int[] background2 = {956, 931, 903, 881, 844, 786, 745};
     private int[] background3 = {1506, 1481, 1453, 1431, 1394, 1336, 1295};
+
+    private GameObject glowTile1;
+    private GameObject glowTile2;
 
     private bool CoinFlip()
     {
@@ -47,18 +51,16 @@ public class LevelCreation : MonoBehaviour
     //Room length must be at least 9 for a spike room.
     private void SpikeRoom(MapSection map)
     {
-        int width = map.width;
-        int height = map.height;
         int tileNum = 0;
         int[] spikeRoomLeft = { 345, 384, 408, 438, 451, 482, 502, 534 };
         int[] spikeRoomRight = { 347, 395, 414, 440, 453, 484, 519, 551 };
         int totalSpikes = width - 6;
         bool isChest = CoinFlip();
         
-        map.yTopBorder = map.basePosition.y + height - 1;
-        map.yBottomBorder = map.basePosition.y + 2;
-        map.xLeftBorder = map.basePosition.x + 1;
-        map.xRightBorder = map.basePosition.x + width - 2;
+        map.yTopBorder = map.height - 2;
+        map.yBottomBorder = 1;
+        map.xLeftBorder = 1;
+        map.xRightBorder = map.width - 2;
 
         //Top tiles
         //Top left corner
@@ -118,20 +120,24 @@ public class LevelCreation : MonoBehaviour
         map.SetTile(width - 1, 0, 628, map.mapArray);
 
         //Chisel the entrance area
+        
         if (currentRoom != 0)
         {
-            for(int x = 2; x > 0; x--)
+            for(int x = 1; x >= 0; x--)
             {
                 for(int y = map.entrance.y; y < map.entrance.y + 6; y++)
                 {
                     map.SetTile(x, y, -1, map.mapArray);
-                    map.SetTile(x - 1, y, -1, map.mapArray);
+                    map.SetTile(x, y, -1, map.mapArray);
                 }
             }
             map.SetTile(1, map.entrance.y, 593, map.mapArray);
             map.SetTile(1, map.entrance.y + 5, 290, map.mapArray);
             map.SetTile(0, map.entrance.y, 1092, map.mapArray);
             map.SetTile(0, map.entrance.y + 5, 1092, map.mapArray);
+
+            Instantiate(glowTile1, new Vector3(map.basePosition.x + 0.5f, map.entrance.y + 0.5f, 0), Quaternion.identity);
+            Instantiate(glowTile1, new Vector3(map.basePosition.x + 0.5f, map.entrance.y + 0.5f + 5, 0), Quaternion.identity);
         }
 
         GenerateBackground(map);
@@ -141,9 +147,9 @@ public class LevelCreation : MonoBehaviour
 
     private void SpikeFloor(MapSection map)
     {
-        for(int i = map.xLeftBorder - map.basePosition.x + 1; i < map.xRightBorder - map.basePosition.x; i++)
+        for(int i = map.xLeftBorder + 1; i < map.xRightBorder; i++)
         {
-            map.SetTile(i, map.yBottomBorder - map.basePosition.y - 1, 192, 2, map.mapArray);
+            map.SetTile(i, map.yBottomBorder, 192, 2, map.mapArray);
         }
     }
 
@@ -187,15 +193,19 @@ public class LevelCreation : MonoBehaviour
             trajectories.Add(new Trajectory(pathPos, player.speed, player.jumpSpeed, player.fallMultiplier, true));
             numPoints = trajectories[platformCount].numPoints;
 
-            for (int i = trajectories[platformCount].numPoints / skipPointsFrac; i < trajectories[platformCount].numPoints; i++)
+            int platformX;
+            int platformY;
+            for (int i = numPoints / skipPointsFrac; i < numPoints; i++)
             {
-                if (trajectories[platformCount].points[i].x > map.xRightBorder)
+                platformX = Mathf.FloorToInt(trajectories[platformCount].points[i].x);
+                platformY = Mathf.FloorToInt(trajectories[platformCount].points[i].y - 1f) - map.basePosition.y;
+                if (platformX > map.xRightBorder)
                     break;
-                else if (trajectories[platformCount].points[i].y > map.yTopBorder - 3 || trajectories[platformCount].points[i].y < map.yBottomBorder + 1)
+                else if (platformY > map.yTopBorder - 7 || platformY < map.yBottomBorder + 3)
                     continue;
                 else
                 {
-                    //Debug.Log("Adding point: " + trajectories[platformCount].points[i]);
+                    Debug.Log("Adding point: " + trajectories[platformCount].points[i]);
                     validPoints.Add(i);
                 }
             }
@@ -227,36 +237,38 @@ public class LevelCreation : MonoBehaviour
             //Debug.Log("Number of platforms generating: " + platformLength);
             for (int i = 0; i < platformLength - 1; i++)
             {
-                map.SetTile(col + i, row, platformTile, map.mapArray);
                 //Debug.Log("Set tile at " + (col + i) + ", " + row + " to " + platformTile);
+                map.SetTile(col + i, row, platformTile, true, map.mapArray);
                 platformTile++;
                 if (platformTile > 58)
                     platformTile = 53;
             }
 
             if (platformLength != 1)
-                map.SetTile(col + platformLength - 1, row, 59, map.mapArray);
+                map.SetTile(col + platformLength - 1, row, 59, true, map.mapArray);
             else if (platformLength == 1)
-                map.SetTile(col + platformLength - 1, row, 52, map.mapArray);
+                map.SetTile(col + platformLength - 1, row, 52, true, map.mapArray);
 
-            pathPos.x = col + platformLength - 1 + map.basePosition.x;
+            pathPos.x = col + (platformLength - 1) + map.basePosition.x;
             pathPos.y = Mathf.FloorToInt(point.y - 1);
             platformCount++;
             validPoints.Clear();
         }
         Debug.Log("Platforms complete, final path pos at: " + pathPos);
-        map.exit = new Vector2Int(pathPos.x - map.basePosition.x, pathPos.y - map.basePosition.y);
+        map.exit = new Vector2Int(map.width - map.basePosition.x - 3, pathPos.y - map.basePosition.y);
 
         //Chisel and set exit area
-        map.SetTile(width - 2, pathPos.y - map.basePosition.y, 578, map.mapArray);
+        map.SetTile(width - 2, pathPos.y - map.basePosition.y, 578, true, map.mapArray);
         map.SetTile(width - 2, pathPos.y - map.basePosition.y + 5, 291, map.mapArray);
-        map.SetTile(width - 1, pathPos.y - map.basePosition.y, 1089, map.mapArray);
+        map.SetTile(width - 1, pathPos.y - map.basePosition.y, 1089, true, map.mapArray);
         map.SetTile(width - 1, pathPos.y - map.basePosition.y + 5, 1089, map.mapArray);
         for(int i = 1; i < 5; i++)
         {
             map.SetTile(map.width - 2, pathPos.y + i, -1, map.mapArray);
             map.SetTile(map.width - 1, pathPos.y + i, -1, map.mapArray);
         }
+        Instantiate(glowTile2, new Vector3(map.basePosition.x + map.width - 1 + 0.5f, map.exit.y + 0.5f, 0), Quaternion.identity);
+        Instantiate(glowTile2, new Vector3(map.basePosition.x + map.width - 1 + 0.5f, map.exit.y + 0.5f + 5, 0), Quaternion.identity);
     }
 
     private void TransitionArea(MapSection map)
@@ -265,9 +277,10 @@ public class LevelCreation : MonoBehaviour
         int glowTile = 1090;
         for(int i = 0; i < map.width; i++)
         {
-            map.SetTile(map.entrance.x + i, map.entrance.y, glowTile, map.mapArray);
+            map.SetTile(map.entrance.x + i, map.entrance.y, glowTile, true, map.mapArray);
             map.SetTile(map.entrance.x + i, map.entrance.y + 5, glowTile, map.mapArray);
         }
+        map.exit = new Vector2Int(map.width - 1, map.entrance.y);
     }
 
     private void DecorateBackground(MapSection map)
@@ -334,17 +347,20 @@ public class LevelCreation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        glowTile1 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile1");
+        glowTile2 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile2");
+        mapData.mapSections.Clear();
         //Create list of map sections
-        maps = new LinkedList<MapSection>();
+        //maps = new List<MapSection>();
 
         //Add first section to map
-        maps.AddLast(new MapSection(height, width, startingPosition));
+        mapData.mapSections.Add(new MapSection(height, width, startingPosition));
 
-        maps.Last.Value.entrance = new Vector2Int(2, (int)(0.3f * maps.Last.Value.height));
+        mapData.mapSections[0].entrance = new Vector2Int(2, (int)(0.3f * mapData.mapSections[0].height));
         currentRoom = 0;
         //Perform first set of generations
-        SpikeRoom(maps.Last.Value);
-        RenderMap(maps.Last.Value);
+        SpikeRoom(mapData.mapSections[0]);
+        RenderMap(mapData.mapSections[0]);
 
         if (width <= 6)
         {
@@ -357,30 +373,39 @@ public class LevelCreation : MonoBehaviour
             height = 20;
         }
 
-        //Debug.Log("Map length is: " + maps.Last.Value.width);
-        //Debug.Log("Map height is: " + maps.Last.Value.height);
+        //Debug.Log("Map length is: " + mapData.mapSections[0].width);
+        //Debug.Log("Map height is: " + mapData.mapSections[0].height);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (player.playerPosition.position.x > maps.Last.Value.basePosition.x + 0.5f * maps.Last.Value.width)
+        if (player.playerPosition.position.x > mapData.mapSections[currentRoom].basePosition.x + 0.5f * mapData.mapSections[currentRoom].width)
         {
+            //Transition area
+            
+            newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
+            newMapEntrance = new Vector2Int(0, mapData.mapSections[currentRoom].exit.y);
+            Debug.Log("Transition map section with base position: " + newMapBase);
+            mapData.mapSections.Add(new MapSection(height, 2, newMapBase));
+
             currentRoom++;
-
-            newMapBase = new Vector2Int(maps.Last.Value.basePosition.x + maps.Last.Value.width, maps.Last.Value.basePosition.y);
-            newMapEntrance = new Vector2Int(2, maps.Last.Value.exit.y);
-
-            maps.AddLast(new MapSection(height, 2, newMapBase));
-
+            mapData.mapSections[currentRoom].entrance = newMapEntrance;
+            TransitionArea(mapData.mapSections[currentRoom]);
+            RenderMap(mapData.mapSections[currentRoom]);
+            
+            
+            //Next map
+            newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
+            newMapEntrance = new Vector2Int(2, mapData.mapSections[currentRoom].exit.y);
             Debug.Log("New map section with base position: " + newMapBase);
-            maps.AddLast(new MapSection(height, width, newMapBase));
+            mapData.mapSections.Add(new MapSection(height, width, newMapBase));
+            currentRoom++;
+            mapData.mapSections[currentRoom].entrance = newMapEntrance;
+            SpikeRoom(mapData.mapSections[currentRoom]);
+            RenderMap(mapData.mapSections[currentRoom]);
 
-            maps.Last.Value.entrance = newMapEntrance;
-
-            SpikeRoom(maps.Last.Value);
-            RenderMap(maps.Last.Value);
         }
     }
 }

@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class AI_Goblin : MonoBehaviour
 {
-    Rigidbody2D m_body2d;
-    Animator m_animator;
+    private Rigidbody2D m_body2d;
+    private Animator m_animator;
+    [SerializeField] private Map_Data mapData;
+    private int room;
 
     // Start is called before the first frame update
     void Start()
     {
         m_body2d = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
+        room = mapData.currentRoom;
+    }
+
+    void Movement()
+    {
+        //if(mapData.mapSections[room].GetTile()
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        Movement();
     }
 }

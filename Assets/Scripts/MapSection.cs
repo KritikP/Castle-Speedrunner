@@ -44,15 +44,54 @@ public class MapSection
         ext = 'e';
     }
 
-    public void SetTile(int x, int y, int tileValue, MapTile[] arr)
+    public int SetTile(int x, int y, int tileValue, MapTile[] arr)
     {
-        arr[y * width + x].tileNum = tileValue;
+        if (-1 < y * width + x || y * width + x < width * height)
+        {
+            arr[y * width + x].tileNum = tileValue;
+            return 0;
+        }
+        else
+            return -1;
     }
 
-    public void SetTile(int x, int y, int tileValue, int tilePallete, MapTile[] arr)
+    public int SetTile(int x, int y, int tileValue, int tilePallete, MapTile[] arr)
     {
-        arr[y * width + x].tileNum = tileValue;
-        arr[y * width + x].palette = tilePallete;
+        if (-1 < y * width + x || y * width + x < width * height)
+        {
+            arr[y * width + x].tileNum = tileValue;
+            arr[y * width + x].palette = tilePallete;
+            return 0;
+        }
+        else
+            return -1;
+    }
+
+    public int SetTile(int x, int y, int tileValue, bool walkable, MapTile[] arr)
+    {
+        if (-1 < y * width + x || y * width + x < width * height)
+        {
+            arr[y * width + x].tileNum = tileValue;
+            arr[y * width + x].walkable = walkable;
+            return 0;
+        }
+        else
+            return -1;
+        
+    }
+
+    public int SetTile(int x, int y, int tileValue, int tilePallete, bool walkable, MapTile[] arr)
+    {
+        if (-1 < y * width + x || y * width + x < width * height)
+        {
+            arr[y * width + x].tileNum = tileValue;
+            arr[y * width + x].palette = tilePallete;
+            arr[y * width + x].walkable = walkable;
+            return 0;
+        }
+        else
+            return -1;
+
     }
 
     public int GetTile(int x, int y, MapTile[] arr)
@@ -87,11 +126,13 @@ public class MapTile
 {
     public int tileNum;
     public int palette;
+    public bool walkable;
 
     public MapTile()
     {
         this.tileNum = 0;
         this.palette = 1;
+        this.walkable = false;
     }
 
 }
