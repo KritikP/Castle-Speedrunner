@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Handler : MonoBehaviour
+public class Enemy_Handler : MonoBehaviour, IDamagable
 {
     private int health;
     private Animator m_animator;

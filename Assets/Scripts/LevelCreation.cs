@@ -164,7 +164,7 @@ public class LevelCreation : MonoBehaviour
 
         //Generating platforms
         
-        Vector2Int pathPos = new Vector2Int(map.entrance.x + map.basePosition.x, map.entrance.y + map.basePosition.y);           //Start of generation
+        Vector2Int pathPos = new Vector2Int(map.entrance.x, map.entrance.y);           //Start of generation
         int numPoints = 0;
         Vector2 point = Vector2.zero;
         int col = 0;
@@ -178,16 +178,14 @@ public class LevelCreation : MonoBehaviour
 
         for (int i = 0; i < entrancePlatformLength; i++)
         {
-            //Debug.Log("Initial " + i + " platform at" + pathPos);
-            map.SetTile(pathPos.x - map.basePosition.x, pathPos.y - map.basePosition.y, platformTile + i, map.mapArray);
-            //Debug.Log(map.GetTile(pathPos.x - map.basePosition.x, pathPos.y - map.basePosition.y, map.mapArray));
+            map.SetTile(pathPos.x, pathPos.y, platformTile + i, map.mapArray);
             pathPos.x = pathPos.x + 1;
         }
-
+        
+        pathPos.x = pathPos.x - 1;
         platformTile = 52;
-        while (pathPos.x < map.basePosition.x + width && platformCount < 20)       //While the generation hasn't reached the end of the map section
+        while (pathPos.x < map.width)       //While the generation hasn't reached the end of the map section
         {
-            //Debug.Log("Platform: " + platformCount);
             platformTile = 52;
 
             trajectories.Add(new Trajectory(pathPos, player.speed, player.jumpSpeed, player.fallMultiplier, true));
@@ -198,46 +196,41 @@ public class LevelCreation : MonoBehaviour
             for (int i = numPoints / skipPointsFrac; i < numPoints; i++)
             {
                 platformX = Mathf.FloorToInt(trajectories[platformCount].points[i].x);
-                platformY = Mathf.FloorToInt(trajectories[platformCount].points[i].y - 1f) - map.basePosition.y;
+                platformY = Mathf.FloorToInt(trajectories[platformCount].points[i].y - 1f);
                 if (platformX > map.xRightBorder)
+                {
                     break;
-                else if (platformY > map.yTopBorder - 7 || platformY < map.yBottomBorder + 3)
-                    continue;
+                }
+                else if (platformY > map.yTopBorder - 6 || platformY < map.yBottomBorder + 3)
+                {
+
+                }
                 else
                 {
-                    Debug.Log("Adding point: " + trajectories[platformCount].points[i]);
                     validPoints.Add(i);
                 }
             }
 
             if (validPoints.Count == 0) //Reached end of section
             {
-                //Debug.Log("Reached end of section");
+                Debug.Log("Reached end of section");
                 break;
             }
-            selectedPoint = rand.Next(numPoints / skipPointsFrac, validPoints.Count + (numPoints / skipPointsFrac));
+            selectedPoint = validPoints[rand.Next(0, validPoints.Count)];
             point = trajectories[platformCount].points[selectedPoint];
 
-            col = Mathf.FloorToInt(point.x - map.basePosition.x);
-            row = Mathf.FloorToInt(point.y - 1) - map.basePosition.y;
-
-            /*
-            Debug.Log("Selected Point " + selectedPoint + ": " + trajectories[platformCount].points[selectedPoint]);
-            Debug.Log("Platform " + platformCount + ":");
-            Debug.Log("x (column) and y (row): (" + col + ", " + row + ")");
-            Debug.Log("Rounded Trajectory point x = " + Mathf.FloorToInt(point.x));
-            Debug.Log("Rounded Trajectory point y = " + Mathf.FloorToInt(point.y - 1));
-            */
+            //Debug.Log("Selected point: " + point);
+            col = Mathf.FloorToInt(point.x);
+            row = Mathf.FloorToInt(point.y - 1);
 
             if ((width - 2) - col < maxPlatformLength)
                 platformLength = (width - 2) - col;
             else
                 platformLength = rand.Next(minPlatformLength, maxPlatformLength + 1);
 
-            //Debug.Log("Number of platforms generating: " + platformLength);
+            //Debug.Log("Number of blocks generating: " + platformLength);
             for (int i = 0; i < platformLength - 1; i++)
             {
-                //Debug.Log("Set tile at " + (col + i) + ", " + row + " to " + platformTile);
                 map.SetTile(col + i, row, platformTile, true, map.mapArray);
                 platformTile++;
                 if (platformTile > 58)
@@ -249,19 +242,18 @@ public class LevelCreation : MonoBehaviour
             else if (platformLength == 1)
                 map.SetTile(col + platformLength - 1, row, 52, true, map.mapArray);
 
-            pathPos.x = col + (platformLength - 1) + map.basePosition.x;
+            pathPos.x = col + (platformLength - 1);
             pathPos.y = Mathf.FloorToInt(point.y - 1);
             platformCount++;
             validPoints.Clear();
         }
-        Debug.Log("Platforms complete, final path pos at: " + pathPos);
-        map.exit = new Vector2Int(map.width - map.basePosition.x - 3, pathPos.y - map.basePosition.y);
+        map.exit = new Vector2Int(map.width - 3, pathPos.y);
 
         //Chisel and set exit area
-        map.SetTile(width - 2, pathPos.y - map.basePosition.y, 578, true, map.mapArray);
-        map.SetTile(width - 2, pathPos.y - map.basePosition.y + 5, 291, map.mapArray);
-        map.SetTile(width - 1, pathPos.y - map.basePosition.y, 1089, true, map.mapArray);
-        map.SetTile(width - 1, pathPos.y - map.basePosition.y + 5, 1089, map.mapArray);
+        map.SetTile(width - 2, pathPos.y, 578, true, map.mapArray);
+        map.SetTile(width - 2, pathPos.y + 5, 291, map.mapArray);
+        map.SetTile(width - 1, pathPos.y, 1089, true, map.mapArray);
+        map.SetTile(width - 1, pathPos.y + 5, 1089, map.mapArray);
         for(int i = 1; i < 5; i++)
         {
             map.SetTile(map.width - 2, pathPos.y + i, -1, map.mapArray);
@@ -384,17 +376,14 @@ public class LevelCreation : MonoBehaviour
         if (player.playerPosition.position.x > mapData.mapSections[currentRoom].basePosition.x + 0.5f * mapData.mapSections[currentRoom].width)
         {
             //Transition area
-            
             newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
             newMapEntrance = new Vector2Int(0, mapData.mapSections[currentRoom].exit.y);
             Debug.Log("Transition map section with base position: " + newMapBase);
             mapData.mapSections.Add(new MapSection(height, 2, newMapBase));
-
             currentRoom++;
             mapData.mapSections[currentRoom].entrance = newMapEntrance;
             TransitionArea(mapData.mapSections[currentRoom]);
             RenderMap(mapData.mapSections[currentRoom]);
-            
             
             //Next map
             newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);

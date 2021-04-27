@@ -94,9 +94,9 @@ public class MapSection
 
     }
 
-    public int GetTile(int x, int y, MapTile[] arr)
+    public MapTile GetTile(int x, int y, MapTile[] arr)
     {
-        return arr[y * width + x].tileNum;
+        return arr[y * width + x];
     }
 
     public void AddObject(int x, int y, MapSection map, MapTile[] layer, TileObjects obj)
