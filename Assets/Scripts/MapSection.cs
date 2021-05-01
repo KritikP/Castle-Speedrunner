@@ -44,6 +44,20 @@ public class MapSection
         ext = 'e';
     }
 
+    public int SetEnemy(int x, int y, int enemyType, MapTile[] arr)
+    {
+        if (-1 < y * width + x || y * width + x < width * height)
+        {
+            //arr[y * width + x].enemy = (EnemyType) enemyType;
+            return 0;
+        }
+        else
+        {
+            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
+            return -1;
+        }
+    }
+
     public int SetTile(int x, int y, int tileValue, MapTile[] arr)
     {
         if (-1 < y * width + x || y * width + x < width * height)
@@ -52,7 +66,10 @@ public class MapSection
             return 0;
         }
         else
+        {
+            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
             return -1;
+        }
     }
 
     public int SetTile(int x, int y, int tileValue, int tilePallete, MapTile[] arr)
@@ -64,7 +81,10 @@ public class MapSection
             return 0;
         }
         else
+        {
+            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
             return -1;
+        }
     }
 
     public int SetTile(int x, int y, int tileValue, bool walkable, MapTile[] arr)
@@ -76,8 +96,11 @@ public class MapSection
             return 0;
         }
         else
+        {
+            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
             return -1;
-        
+        }
+
     }
 
     public int SetTile(int x, int y, int tileValue, int tilePallete, bool walkable, MapTile[] arr)
@@ -90,7 +113,10 @@ public class MapSection
             return 0;
         }
         else
+        {
+            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
             return -1;
+        }
 
     }
 
@@ -124,15 +150,22 @@ public class MapSection
 
 public class MapTile
 {
+    public enum EnemyType
+    {
+        None, Goblin, Bat
+    }
+
     public int tileNum;
     public int palette;
     public bool walkable;
-
+    public EnemyType enemy;
+    
     public MapTile()
     {
         this.tileNum = 0;
         this.palette = 1;
         this.walkable = false;
+        this.enemy = EnemyType.None;
     }
 
 }

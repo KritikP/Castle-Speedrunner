@@ -8,6 +8,7 @@ public class Player_Data : ScriptableObject
     [SerializeField] public int     maxHealth = 100;
     [SerializeField] public int     health;
     [SerializeField] public bool    invincible = false;
+    [SerializeField] public bool    isBlocking = false;
     [SerializeField] public float   invincibilityTime = 1f;
     [SerializeField] public int     attackDamage;
     [SerializeField] public float   speed = 7f;
@@ -15,6 +16,13 @@ public class Player_Data : ScriptableObject
     [SerializeField] public float   rollSpeed = 10f;
     [SerializeField] public float   fallMultiplier = 1f;
     [SerializeField] public float   variableJumpMultiplier = 2f;
+    [SerializeField] public LayerMask playerLayer;
     public Transform                playerPosition;
+
+    private void OnEnable()
+    {
+        health = maxHealth;
+        invincible = false;
+    }
 
 }

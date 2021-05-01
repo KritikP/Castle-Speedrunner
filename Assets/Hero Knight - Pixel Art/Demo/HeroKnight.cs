@@ -10,6 +10,7 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] GameObject attackHitbox;
     [SerializeField] LayerMask  enemyLayer;
 
+    private ContactFilter2D     contactFilter2d;
     private Animator            animator;
     private Rigidbody2D         body2d;
     private Collider2D          pCollider2D;
@@ -21,6 +22,7 @@ public class HeroKnight : MonoBehaviour {
     private bool                grounded = false;
     private bool                rolling = false;
     private bool                jumping = false;
+    private bool                canMove = true;
     private int                 facingDirection = 1;
     private int                 currentAttack = 0;
     private int                 totalJumps;
@@ -38,6 +40,7 @@ public class HeroKnight : MonoBehaviour {
         wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
+        player.playerPosition = GetComponent<Transform>();
     }
 
     // Use this for initialization
@@ -46,8 +49,14 @@ public class HeroKnight : MonoBehaviour {
         trajectories = new List<Trajectory>();
         totalJumps = 0;
 
+        contactFilter2d = new ContactFilter2D();
+        contactFilter2d.SetLayerMask(enemyLayer);
+
         Physics2D.IgnoreLayerCollision(9, 10);  //Ignore collisions between player and dead enemies
-        Physics2D.IgnoreLayerCollision(8, 10);  //Ignore collisions between player and dead enemies
+        Physics2D.IgnoreLayerCollision(8, 10);  //Ignore collisions between player and enemies
+        Physics2D.IgnoreLayerCollision(8, 8);  //Ignore collisions between enemies
+        Physics2D.IgnoreLayerCollision(9, 9);  //Ignore collisions between dead enemies
+
 
     }
 
@@ -95,7 +104,7 @@ public class HeroKnight : MonoBehaviour {
             attackHitbox.transform.localPosition = new Vector2(attackHitbox.transform.localPosition.x * -1, attackHitbox.transform.localPosition.y);
 
         // Move
-        if (!rolling && timeSinceAttack > 0.5f)
+        if (!rolling && timeSinceAttack > 0.5f && canMove)
             body2d.velocity = new Vector2(inputX * player.speed, body2d.velocity.y);
 
         //Set AirSpeed in animator
@@ -111,26 +120,27 @@ public class HeroKnight : MonoBehaviour {
             animator.SetBool("noBlood", noBlood);
             animator.SetTrigger("Death");
         }
-            
+
         //Hurt
         else if (Input.GetKeyDown("q") && !rolling)
             animator.SetTrigger("Hurt");
 
         //Attack
-        else if(Input.GetMouseButtonDown(0) && timeSinceAttack > 0.25f && grounded && !rolling)
+        else if (Input.GetMouseButtonDown(0) && timeSinceAttack > 0.25f && grounded && !rolling)
         {
             currentAttack++;
-            
+
             body2d.velocity = new Vector2(0, body2d.velocity.y);
 
-            Collider2D[] attackCollisions = Physics2D.OverlapCircleAll(attackHitbox.transform.position, attackHitbox.GetComponent<CircleCollider2D>().radius, enemyLayer);
+            List<Collider2D> hitColliders = new List<Collider2D>();
+            attackHitbox.GetComponent<Collider2D>().OverlapCollider(contactFilter2d, hitColliders);
 
-            foreach(Collider2D enemy in attackCollisions)
+            foreach (Collider2D enemy in hitColliders)
             {
-                Debug.Log("We hit " + enemy.name);
-                if (enemy.GetComponent<Enemy_Handler>())
+                if (enemy.GetComponent<IDamagable>() != null)
                 {
-                    enemy.GetComponent<Enemy_Handler>().TakeDamage(player.attackDamage);
+                    Debug.Log("We hit enemy: " + enemy.name);
+                    enemy.GetComponent<IDamagable>().TakeDamage(player.attackDamage);
                 }
             }
 
@@ -154,10 +164,15 @@ public class HeroKnight : MonoBehaviour {
         {
             animator.SetTrigger("Block");
             animator.SetBool("IdleBlock", true);
+            body2d.velocity = new Vector2(0, body2d.velocity.y);
+            canMove = false;
         }
 
         else if (Input.GetMouseButtonUp(1) && !rolling)
+        {
             animator.SetBool("IdleBlock", false);
+            canMove = true;
+        }
 
         // Roll
         else if (Input.GetKeyDown("left shift") && !rolling && grounded)
@@ -170,7 +185,7 @@ public class HeroKnight : MonoBehaviour {
         //Jump
         else if (Input.GetKeyDown("space") && grounded && !rolling)
         {
-            if(facingDirection > 0)
+            if (facingDirection > 0)
                 trajectories.Add(new Trajectory(body2d.transform.position, player.speed, player.jumpSpeed, player.fallMultiplier, true));
             else
                 trajectories.Add(new Trajectory(body2d.transform.position, -player.speed, player.jumpSpeed, player.fallMultiplier, true));
@@ -196,8 +211,8 @@ public class HeroKnight : MonoBehaviour {
         {
             // Prevents flickering transitions to idle
             delayToIdle -= Time.deltaTime;
-                if(delayToIdle < 0)
-                    animator.SetInteger("AnimState", 0);
+            if (delayToIdle < 0)
+                animator.SetInteger("AnimState", 0);
         }
 
         if(body2d.velocity.y < 0)
@@ -209,14 +224,6 @@ public class HeroKnight : MonoBehaviour {
         {
             body2d.velocity += Vector2.up * Physics2D.gravity.y * (player.variableJumpMultiplier) * Time.deltaTime;
         }
-
-        /*Debugging max height information
-        if(body2d.velocity.y <= 0 && Input.GetKey("space"))
-        {
-            //Debug.Log("Max Height Calc " + (trajectories[0].startPos.y + (Mathf.Pow(player.jumpSpeed, 2) / (2 * -Physics2D.gravity.y)) ));
-            //Debug.Log("Rigidbody pos " + body2d.position.y);
-        }
-        */
 
     }
 

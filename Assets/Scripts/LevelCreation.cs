@@ -19,7 +19,7 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private int height;
     [SerializeField] private int minPlatformLength = 2;
     [SerializeField] private int maxPlatformLength = 5;
-    [SerializeField] private Vector2Int startingPosition;
+    [SerializeField] private Vector2Int startingPosition = Vector2Int.zero;
     
     private int entrancePlatformLength = 4;
     private int currentRoom;
@@ -157,13 +157,13 @@ public class LevelCreation : MonoBehaviour
     {
         //Debug.Log("Creating room " + currentRoom);
         int platformTile = 56;
+        int maxEnemyCount = 3;
+        int enemyCount = 0;
 
         List<Trajectory> trajectories = new List<Trajectory>();
         width = map.width;
         height = map.height;
 
-        //Generating platforms
-        
         Vector2Int pathPos = new Vector2Int(map.entrance.x, map.entrance.y);           //Start of generation
         int numPoints = 0;
         Vector2 point = Vector2.zero;
@@ -241,6 +241,16 @@ public class LevelCreation : MonoBehaviour
                 map.SetTile(col + platformLength - 1, row, 59, true, map.mapArray);
             else if (platformLength == 1)
                 map.SetTile(col + platformLength - 1, row, 52, true, map.mapArray);
+
+            //Spawn enemy
+            if(enemyCount < maxEnemyCount)
+            {
+                if (rand.Next(0, 4) == 0)
+                {
+                    //Spawn
+                    
+                }
+            }
 
             pathPos.x = col + (platformLength - 1);
             pathPos.y = Mathf.FloorToInt(point.y - 1);

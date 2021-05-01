@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Health : MonoBehaviour
+public class Player_Health : MonoBehaviour, IDamagable
 {
     [SerializeField] private Player_Data player;
     private SpriteRenderer m_spriteRenderer;
+    private Animator animator;
     private Collider2D m_collider2D;
 
     // Start is called before the first frame update
     void Start()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         player.health = player.maxHealth;
     }
 
@@ -20,10 +22,12 @@ public class Player_Health : MonoBehaviour
         if (!player.invincible)
         {
             player.health -= damage;
+            animator.SetTrigger("Hurt");
+            player.invincible = true;
+            Debug.Log("Took Damage, Health = " + player.health);
+            StartCoroutine(InvincibilityFrames());
         }
-        player.invincible = true;
-        Debug.Log("Took Damage, Health = " + player.health);
-        StartCoroutine(InvincibilityFrames());
+        
     }
 
     private IEnumerator InvincibilityFrames()
@@ -40,17 +44,4 @@ public class Player_Health : MonoBehaviour
         player.invincible = false;
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.layer.CompareTo(8) == 0)
-        {
-            TakeDamage(20);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
