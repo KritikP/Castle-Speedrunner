@@ -7,7 +7,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected int health;
     protected float moveSpeed;
     protected int attackDamage;
-
+    
     protected Animator animator;
     protected SpriteRenderer spriteData;
     protected Rigidbody2D body2d;
@@ -25,12 +25,14 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected bool canMove;
     protected bool dead;
 
+    [SerializeField] protected float pauseMovementTime = 1f;
     [SerializeField] protected CollisionSensor leftWalkSensor;
     [SerializeField] protected CollisionSensor rightWalkSensor;
     [SerializeField] protected AttackSensor attackHitbox;
     [SerializeField] protected Enemy_Data enemyData;
     [SerializeField] protected Player_Data playerData;
     [SerializeField] private Map_Data mapData;
+
     private int room;
 
     public void TakeDamage(int damage)
@@ -43,7 +45,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     {
         if (health <= 0)
         {
-            Debug.Log("Dead");
+            //Debug.Log("Dead");
             dead = true;
             fade = fade - Time.deltaTime * 0.3f;
             gameObject.layer = 9;   //Dead enemies layer
@@ -151,7 +153,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
             if (!canWalkLeft && !canWalkRight)
             {
-                //Debug.Log("Enemy stuck");
+                Debug.Log("Enemy stuck");
                 animator.SetBool("Walking", false);
                 walkDirection = 0;
             }
@@ -162,10 +164,10 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
             }
             else if (walkDirection == -1 && !canWalkLeft)    //If walking left and can't keep walking left, then start walking right
             {
-                walkDirection = 1;
-                spriteData.flipX = false;
-                animator.SetBool("Walking", true);
-
+                canMove = false;
+                animator.SetBool("Walking", false);
+                StartCoroutine(PauseMovementRoutine());
+                
             }
             else if (walkDirection == 1 && canWalkRight)     //If walking right and can keep walking right, then keep walking right
             {
@@ -174,6 +176,9 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
             }
             else    //If walking right and can't keep walking right, then start walking left
             {
+                canMove = false;
+                animator.SetBool("Walking", false);
+                StartCoroutine(PauseMovementRoutine());
                 walkDirection = -1;
                 spriteData.flipX = true;
                 animator.SetBool("Walking", true);
@@ -194,6 +199,24 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         {
             body2d.velocity = new Vector2(0, body2d.velocity.y);
         }
+    }
+
+    /*
+    protected void PauseMovement()
+    {
+        canMove = false;
+        animator.SetBool("Walking", false);
+        StartCoroutine(PauseMovementRoutine());
+    }
+    */
+
+    private IEnumerator PauseMovementRoutine()
+    {
+        yield return new WaitForSeconds(1f);
+        canMove = true;
+        walkDirection = 1;
+        spriteData.flipX = false;
+        animator.SetBool("Walking", true);
     }
 
 }

@@ -8,7 +8,7 @@ public class AI_Bat : Enemy_Handler
     {
         if (canMove && !dead)
         {
-            if (!leftWalkSensor.isCollision())
+            if (leftWalkSensor.isCollision())
             {
                 canWalkLeft = true;
             }
@@ -17,7 +17,7 @@ public class AI_Bat : Enemy_Handler
                 canWalkLeft = false;
             }
 
-            if (!rightWalkSensor.isCollision())
+            if (rightWalkSensor.isCollision())
             {
                 canWalkRight = true;
             }
@@ -28,7 +28,7 @@ public class AI_Bat : Enemy_Handler
 
             if (!canWalkLeft && !canWalkRight)
             {
-                //Debug.Log("Enemy stuck");
+                Debug.Log("Enemy stuck");
                 animator.SetBool("Walking", false);
                 walkDirection = 0;
             }
@@ -56,7 +56,7 @@ public class AI_Bat : Enemy_Handler
                 animator.SetBool("Walking", true);
             }
 
-            body2d.velocity = new Vector2(-walkDirection * moveSpeed, body2d.velocity.y);
+            body2d.velocity = new Vector2(walkDirection * moveSpeed, body2d.velocity.y);
         }
         else
         {
