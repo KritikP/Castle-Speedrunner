@@ -36,6 +36,11 @@ public class LevelCreation : MonoBehaviour
     private GameObject glowTile1;
     private GameObject glowTile2;
 
+    [SerializeField] private int                  maxEnemiesPerRoom = 3;
+    [SerializeField, Range(0, 1)] private float   enemySpawnRatePerPlatform = 0.2f;
+    [SerializeField] private int                  maxCoinSetsPerRoom = 2;
+    [SerializeField, Range(0, 1)] private float   coinSpawnRatePerPlatform = 0.2f;
+    
     private bool CoinFlip()
     {
         return rand.Next(2) == 1;
@@ -158,14 +163,15 @@ public class LevelCreation : MonoBehaviour
     {
         //Debug.Log("Creating room " + currentRoom);
         int platformTile = 56;
-        int maxEnemyCount = 3;
         int enemyCount = 0;
+        int coinSetCount = 0;
 
         List<Trajectory> trajectories = new List<Trajectory>();
         width = map.width;
         height = map.height;
 
         Vector2Int pathPos = new Vector2Int(map.entrance.x, map.entrance.y);           //Start of generation
+        
         int numPoints = 0;
         Vector2 point = Vector2.zero;
         int col = 0;
@@ -184,6 +190,7 @@ public class LevelCreation : MonoBehaviour
         }
         
         pathPos.x = pathPos.x - 1;
+
         platformTile = 52;
         while (pathPos.x < map.width)       //While the generation hasn't reached the end of the map section
         {
@@ -194,6 +201,7 @@ public class LevelCreation : MonoBehaviour
 
             int platformX;
             int platformY;
+            //Debug.Log("Path pos" + pathPos);
             for (int i = numPoints / skipPointsFrac; i < numPoints; i++)
             {
                 platformX = Mathf.FloorToInt(trajectories[platformCount].points[i].x);
@@ -202,7 +210,7 @@ public class LevelCreation : MonoBehaviour
                 {
                     break;
                 }
-                else if (platformY > map.yTopBorder - 6 || platformY < map.yBottomBorder + 3)
+                else if (platformY > map.yTopBorder - 7 || platformY < map.yBottomBorder + 3)
                 {
 
                 }
@@ -244,13 +252,28 @@ public class LevelCreation : MonoBehaviour
                 map.SetTile(col + platformLength - 1, row, 52, true, map.mapArray);
 
             //Set enemies
-            if(enemyCount < maxEnemyCount && platformLength > 2)
+            if(enemyCount < maxEnemiesPerRoom && platformLength > 2)
             {
-                if (rand.Next(0, 2) == 0)
+                if (rand.Next(0, 100) < enemySpawnRatePerPlatform * 100)
                 {
                     //Spawn
                     map.SetEnemy(col + platformLength - 1, row + 1, enemiesList[rand.Next(0, enemiesList.Length)], map.mapArray);
                     enemyCount++;
+                }
+            }
+
+            //Set coins
+            if (coinSetCount < maxCoinSetsPerRoom)
+            {
+                if (rand.Next(0, 100) < coinSpawnRatePerPlatform * 100)
+                {
+                    //Create coins
+                    for(int i = 0; validPoints[i] != selectedPoint; i++)
+                    {
+                        Vector3 pos = new Vector3(map.basePosition.x + trajectories[platformCount].points[validPoints[i]].x, map.basePosition.y + trajectories[platformCount].points[validPoints[i]].y + 1, 0);
+                        Instantiate(Resources.Load("Prefabs/Items/Coin"), pos, Quaternion.identity);
+                    }
+                    coinSetCount++;
                 }
             }
 

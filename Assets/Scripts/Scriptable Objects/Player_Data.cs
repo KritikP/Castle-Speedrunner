@@ -20,10 +20,13 @@ public class Player_Data : ScriptableObject
     public bool                     isDead = false;
     public Transform                playerPosition;
 
+    public int                      coins = 0;
+
     private void OnEnable()
     {
         health = maxHealth;
         invincible = false;
+        coins = 0;
     }
 
 }
