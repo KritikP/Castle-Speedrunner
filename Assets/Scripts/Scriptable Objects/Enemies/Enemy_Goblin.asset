@@ -17,3 +17,4 @@ MonoBehaviour:
   contactDamage: 5
   attackDamage: 15
   moveSpeed: 5
+  prefab: {fileID: 7017589001550409044, guid: df91d6896dcfc924b8c6e282c6880b91, type: 3}

@@ -14,6 +14,7 @@ public class LevelCreation : MonoBehaviour
 
     [SerializeField] private Player_Data player;
     [SerializeField] private TileObjectsList tileObjects;
+    private GameObject[] enemiesList;
 
     [SerializeField] private int width;
     [SerializeField] private int height;
@@ -242,13 +243,14 @@ public class LevelCreation : MonoBehaviour
             else if (platformLength == 1)
                 map.SetTile(col + platformLength - 1, row, 52, true, map.mapArray);
 
-            //Spawn enemy
-            if(enemyCount < maxEnemyCount)
+            //Set enemies
+            if(enemyCount < maxEnemyCount && platformLength > 2)
             {
-                if (rand.Next(0, 4) == 0)
+                if (rand.Next(0, 2) == 0)
                 {
                     //Spawn
-                    
+                    map.SetEnemy(col + platformLength - 1, row + 1, enemiesList[rand.Next(0, enemiesList.Length)], map.mapArray);
+                    enemyCount++;
                 }
             }
 
@@ -342,6 +344,11 @@ public class LevelCreation : MonoBehaviour
                 {
                     tilemap.SetTile(new Vector3Int(map.basePosition.x + x, map.basePosition.y + y, 0), null);
                 }
+
+                if(arr[y * width + x].enemy != null)
+                {
+                    Instantiate(arr[y * width + x].enemy, new Vector3(map.basePosition.x + x, map.basePosition.y + y + 1, 0), Quaternion.identity);
+                }
             }
         }
     }
@@ -349,11 +356,11 @@ public class LevelCreation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        enemiesList = Resources.LoadAll<GameObject>("Prefabs/Enemies");
         glowTile1 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile1");
         glowTile2 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile2");
+
         mapData.mapSections.Clear();
-        //Create list of map sections
-        //maps = new List<MapSection>();
 
         //Add first section to map
         mapData.mapSections.Add(new MapSection(height, width, startingPosition));

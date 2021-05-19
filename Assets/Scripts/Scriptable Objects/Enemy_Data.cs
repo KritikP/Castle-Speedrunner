@@ -10,4 +10,5 @@ public class Enemy_Data : ScriptableObject
     public int contactDamage;
     public int attackDamage;
     public float moveSpeed;
+    public GameObject prefab;
 }

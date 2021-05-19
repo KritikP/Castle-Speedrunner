@@ -8,11 +8,11 @@ public class TileObjectsList : ScriptableObject
     public Dictionary<string, List<TileObjects>> tileObjects;
     public Dictionary<string, List<TileObjects>> groundedTileObjects;
 
-    private List<string> baseNames;
-    private List<string> groundedBaseNames;
+    private List<string> baseNames = new List<string>();
+    private List<string> groundedBaseNames = new List<string>();
 
     private string baseName;
-
+    
     private string randName;
     private System.Random rand = new System.Random();
 

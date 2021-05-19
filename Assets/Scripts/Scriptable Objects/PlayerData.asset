@@ -26,4 +26,5 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
+  isDead: 0
   playerPosition: {fileID: 0}

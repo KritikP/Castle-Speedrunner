@@ -17,6 +17,7 @@ public class Player_Data : ScriptableObject
     [SerializeField] public float   fallMultiplier = 1f;
     [SerializeField] public float   variableJumpMultiplier = 2f;
     [SerializeField] public LayerMask playerLayer;
+    public bool                     isDead = false;
     public Transform                playerPosition;
 
     private void OnEnable()
