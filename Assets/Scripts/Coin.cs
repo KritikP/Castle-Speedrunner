@@ -5,17 +5,12 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     [SerializeField] private Player_Data playerData;
+    private AudioManager audioManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -23,6 +18,7 @@ public class Coin : MonoBehaviour
         if (collision.gameObject.layer == 10)
         {
             playerData.coins++;
+            audioManager.Play("Coin Pickup");
             Destroy(gameObject);
         }
     }

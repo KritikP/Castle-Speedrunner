@@ -10,6 +10,7 @@ public class MapSection
     public MapTile[] mapArray { get; set; }
     public MapTile[] backgroundArray { get; set; }
     public MapTile[] decorationsArray { get; set; }
+    public MapTile[] trapsArray { get; set; }
 
     public Vector2Int basePosition { get; set; }
     public Vector2Int entrance {get; set; }
@@ -30,11 +31,13 @@ public class MapSection
         height = h;
 
         //Declare and initialize sections
+        trapsArray = new MapTile[width * height];
         mapArray = new MapTile[width * height];
         backgroundArray = new MapTile[width * height];
         decorationsArray = new MapTile[width * height];
         for (int i = 0; i < width * height; i++)
         {
+            trapsArray[i] = new MapTile();
             mapArray[i] = new MapTile();
             backgroundArray[i] = new MapTile();
             decorationsArray[i] = new MapTile();

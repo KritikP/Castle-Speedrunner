@@ -10,6 +10,7 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] GameObject attackHitbox;
     [SerializeField] LayerMask  enemyLayer;
 
+    private AudioManager audioManager;
     private ContactFilter2D     contactFilter2d;
     private Animator            animator;
     private Rigidbody2D         body2d;
@@ -41,6 +42,7 @@ public class HeroKnight : MonoBehaviour {
         wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         player.playerPosition = GetComponent<Transform>();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     // Use this for initialization
@@ -138,7 +140,8 @@ public class HeroKnight : MonoBehaviour {
                 {
                     if (enemy.GetComponent<IDamagable>() != null)
                     {
-                        Debug.Log("We hit enemy: " + enemy.name);
+                        //Debug.Log("We hit enemy: " + enemy.name);
+                        audioManager.Play("Hit");
                         enemy.GetComponent<IDamagable>().TakeDamage(player.attackDamage);
                     }
                 }
@@ -153,7 +156,8 @@ public class HeroKnight : MonoBehaviour {
 
                 // Call one of three attack animations "Attack1", "Attack2", "Attack3"
                 animator.SetTrigger("Attack" + currentAttack);
-
+                //Play attack audio
+                audioManager.Play("swing" + currentAttack.ToString());
                 // Reset timer
                 timeSinceAttack = 0.0f;
             }

@@ -5,11 +5,13 @@ using UnityEngine.Tilemaps;
 
 public class LevelCreation : MonoBehaviour
 {
+    [SerializeField] private Tilemap trapsTilemap;
     [SerializeField] private Tilemap groundTilemap;
     [SerializeField] private Tilemap backgroundTilemap;
     [SerializeField] private Tilemap backgroundDecorationTilemap;
     [SerializeField] private Map_Data mapData;
-    
+    [SerializeField] private TrapSpawner trapSpawner;
+
     private List<MapSection> maps;
 
     [SerializeField] private Player_Data player;
@@ -32,6 +34,8 @@ public class LevelCreation : MonoBehaviour
     private int[] background1b = {230, 185, 144};
     private int[] background2 = {956, 931, 903, 881, 844, 786, 745};
     private int[] background3 = {1506, 1481, 1453, 1431, 1394, 1336, 1295};
+    private int[] spikeRoomLeft = { 345, 384, 408, 438, 451, 482, 502, 534 };
+    private int[] spikeRoomRight = { 347, 395, 414, 440, 453, 484, 519, 551 };
 
     private GameObject glowTile1;
     private GameObject glowTile2;
@@ -40,7 +44,8 @@ public class LevelCreation : MonoBehaviour
     [SerializeField, Range(0, 1)] private float   enemySpawnRatePerPlatform = 0.2f;
     [SerializeField] private int                  maxCoinSetsPerRoom = 2;
     [SerializeField, Range(0, 1)] private float   coinSpawnRatePerPlatform = 0.2f;
-    
+    [SerializeField] private int                  maxTrapsPerRoom = 2;
+
     private bool CoinFlip()
     {
         return rand.Next(2) == 1;
@@ -55,11 +60,9 @@ public class LevelCreation : MonoBehaviour
     }
 
     //Room length must be at least 9 for a spike room.
-    private void SpikeRoom(MapSection map)
+    private void RoomBase(MapSection map)
     {
         int tileNum = 0;
-        int[] spikeRoomLeft = { 345, 384, 408, 438, 451, 482, 502, 534 };
-        int[] spikeRoomRight = { 347, 395, 414, 440, 453, 484, 519, 551 };
         int totalSpikes = width - 6;
         bool isChest = CoinFlip();
         
@@ -148,14 +151,31 @@ public class LevelCreation : MonoBehaviour
 
         GenerateBackground(map);
         EndlessRunnerSection(map);
-        SpikeFloor(map);
+        TrapFloor(map);
     }
 
     private void SpikeFloor(MapSection map)
     {
         for(int i = map.xLeftBorder + 1; i < map.xRightBorder; i++)
         {
-            map.SetTile(i, map.yBottomBorder, 192, 2, map.mapArray);
+            map.SetTile(i, map.yBottomBorder, -1, map.mapArray);
+            map.SetTile(i, map.yBottomBorder, 192, 2, map.trapsArray);
+        }
+    }
+
+    private void TrapFloor(MapSection map)
+    {
+        int trapSectionWidth = (map.width - 10) / maxTrapsPerRoom;
+        if (trapSectionWidth < 1)
+            return;
+        
+        for(int i = 0; i < maxTrapsPerRoom; i++)
+        {
+            trapSpawner.SpawnShurikenTrap(new Vector3(map.basePosition.x + 10 + i * trapSectionWidth + 0.5f, map.yBottomBorder, 0));
+            map.SetTile(9 + i * trapSectionWidth, map.yBottomBorder, 593, map.mapArray);
+            map.SetTile(10 + i * trapSectionWidth, map.yBottomBorder, -1, map.mapArray);
+            map.SetTile(11 + i * trapSectionWidth, map.yBottomBorder, 578, map.mapArray);
+
         }
     }
 
@@ -222,7 +242,7 @@ public class LevelCreation : MonoBehaviour
 
             if (validPoints.Count == 0) //Reached end of section
             {
-                Debug.Log("Reached end of section");
+                //Debug.Log("Reached end of section");
                 break;
             }
             selectedPoint = validPoints[rand.Next(0, validPoints.Count)];
@@ -327,6 +347,7 @@ public class LevelCreation : MonoBehaviour
 
     private void RenderMap(MapSection map)
     {
+        RenderMapHelper(map, map.trapsArray, trapsTilemap);
         RenderMapHelper(map, map.mapArray, groundTilemap);
         RenderMapHelper(map, map.backgroundArray, backgroundTilemap);
         RenderMapHelper(map, map.decorationsArray, backgroundDecorationTilemap);
@@ -391,7 +412,7 @@ public class LevelCreation : MonoBehaviour
         mapData.mapSections[0].entrance = new Vector2Int(2, (int)(0.3f * mapData.mapSections[0].height));
         currentRoom = 0;
         //Perform first set of generations
-        SpikeRoom(mapData.mapSections[0]);
+        RoomBase(mapData.mapSections[0]);
         RenderMap(mapData.mapSections[0]);
 
         if (width <= 6)
@@ -413,7 +434,7 @@ public class LevelCreation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.playerPosition.position.x > mapData.mapSections[currentRoom].basePosition.x + 0.5f * mapData.mapSections[currentRoom].width)
+        if (!player.isDead && player.playerPosition.position.x > mapData.mapSections[currentRoom].basePosition.x + 0.5f * mapData.mapSections[currentRoom].width)
         {
             //Transition area
             newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
@@ -432,7 +453,7 @@ public class LevelCreation : MonoBehaviour
             mapData.mapSections.Add(new MapSection(height, width, newMapBase));
             currentRoom++;
             mapData.mapSections[currentRoom].entrance = newMapEntrance;
-            SpikeRoom(mapData.mapSections[currentRoom]);
+            RoomBase(mapData.mapSections[currentRoom]);
             RenderMap(mapData.mapSections[currentRoom]);
 
         }
