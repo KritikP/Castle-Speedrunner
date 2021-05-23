@@ -10,7 +10,7 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] GameObject attackHitbox;
     [SerializeField] LayerMask  enemyLayer;
 
-    private AudioManager audioManager;
+    private AudioManager        audioManager;
     private ContactFilter2D     contactFilter2d;
     private Animator            animator;
     private Rigidbody2D         body2d;
@@ -28,6 +28,7 @@ public class HeroKnight : MonoBehaviour {
     private int                 currentAttack = 0;
     private int                 totalJumps;
     private float               timeSinceAttack = 0.0f;
+    private float               timeSinceRoll = 0.0f;
     private float               delayToIdle = 0.0f;
     private Trajectory          trajectory;
 
@@ -65,9 +66,15 @@ public class HeroKnight : MonoBehaviour {
         player.playerPosition = transform;
         // Increase timer that controls attack combo
         timeSinceAttack += Time.deltaTime;
+        timeSinceRoll += Time.deltaTime;
 
         if (!player.isDead)
         {
+            if(rolling && timeSinceRoll > 0.5f)
+            {
+                rolling = false;
+            }
+
             //Check if character just landed on the ground
             if (!grounded && groundSensor.State())
             {
@@ -180,6 +187,7 @@ public class HeroKnight : MonoBehaviour {
             // Roll
             else if (Input.GetKeyDown("left shift") && !rolling && grounded)
             {
+                timeSinceRoll = 0f;
                 rolling = true;
                 animator.SetTrigger("Roll");
                 body2d.velocity = new Vector2(facingDirection * player.rollSpeed, body2d.velocity.y);

@@ -7,6 +7,7 @@ public class Player_Health : MonoBehaviour, IDamagable
     [SerializeField] private Player_Data player;
     private SpriteRenderer spriteData;
     private Animator animator;
+    private Rigidbody2D body2d;
     private float fade = 1f;
 
     // Start is called before the first frame update
@@ -14,6 +15,7 @@ public class Player_Health : MonoBehaviour, IDamagable
     {
         spriteData = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        body2d = GetComponent<Rigidbody2D>();
         player.health = player.maxHealth;
     }
 
@@ -48,6 +50,7 @@ public class Player_Health : MonoBehaviour, IDamagable
             animator.SetTrigger("Hurt");
             player.invincible = true;
             Debug.Log("Took Damage, Health = " + player.health);
+            body2d.velocity = new Vector2(0f, body2d.velocity.y);
             StartCoroutine(InvincibilityFrames());
         }
         

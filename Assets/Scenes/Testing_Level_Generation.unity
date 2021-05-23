@@ -224,7 +224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shuriken: {fileID: 6410942657261369762, guid: bbd12437080e4174cbabc02869ec3336,
     type: 3}
-  shurikenSpawnSpeed: 1
+  shurikenSpawnSpeed: 1.5
   shurikenSpeed: 20
   mapData: {fileID: 11400000, guid: c9afdc969ba719e4eb2191f4a81e1782, type: 2}
   firing: 1
@@ -822,6 +822,11 @@ PrefabInstance:
       propertyPath: trapSpawner
       value: 
       objectReference: {fileID: 420283928}
+    - target: {fileID: 6647152759934968624, guid: 49c9d0641d1a4434d9aff7828c932370,
+        type: 3}
+      propertyPath: coinSpawnRatePerPlatform
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6647152759934968629, guid: 49c9d0641d1a4434d9aff7828c932370,
         type: 3}
       propertyPath: m_Name

@@ -13,7 +13,6 @@ public class AttackSensor : CollisionSensor
         {
             collisionCount = true;
             attackEvent.Invoke();
-            Debug.Log("Collision = true");
         }
     }
 }

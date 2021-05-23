@@ -95,7 +95,7 @@ public class MapSection
         if (-1 < y * width + x || y * width + x < width * height)
         {
             arr[y * width + x].tileNum = tileValue;
-            arr[y * width + x].walkable = walkable;
+            //arr[y * width + x].walkable = walkable;
             return 0;
         }
         else
@@ -112,7 +112,7 @@ public class MapSection
         {
             arr[y * width + x].tileNum = tileValue;
             arr[y * width + x].palette = tilePallete;
-            arr[y * width + x].walkable = walkable;
+            //arr[y * width + x].walkable = walkable;
             return 0;
         }
         else
@@ -161,14 +161,14 @@ public class MapTile
 {
     public int tileNum;
     public int palette;
-    public bool walkable;
+    //public bool walkable;
     public GameObject enemy;
 
     public MapTile()
     {
         this.tileNum = 0;
         this.palette = 1;
-        this.walkable = false;
+        //this.walkable = false;
         this.enemy = null;
     }
 
