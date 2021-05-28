@@ -28,3 +28,4 @@ MonoBehaviour:
     m_Bits: 1024
   isDead: 0
   playerPosition: {fileID: 0}
+  coins: 0

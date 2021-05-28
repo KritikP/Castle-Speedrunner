@@ -28,6 +28,8 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     [SerializeField] protected float pauseMovementTime = 1f;
     [SerializeField] protected CollisionSensor leftWalkSensor;
     [SerializeField] protected CollisionSensor rightWalkSensor;
+    [SerializeField] protected CollisionSensor leftWallSensor;
+    [SerializeField] protected CollisionSensor rightWallSensor;
     [SerializeField] protected AttackSensor attackHitbox;
     [SerializeField] protected Enemy_Data enemyData;
     [SerializeField] protected Player_Data playerData;
@@ -123,6 +125,8 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         playerFilter.SetLayerMask(playerData.playerLayer);
         leftWalkSensor.layerMask = groundMask;
         rightWalkSensor.layerMask = groundMask;
+        leftWallSensor.layerMask = groundMask;
+        rightWallSensor.layerMask = groundMask;
         attackHitbox.layerMask = playerMask;
 
         if (moveSpeed <= 0)
@@ -136,7 +140,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     {
         if (canMove && !dead)
         {
-            if (leftWalkSensor.isCollision())
+            if (leftWalkSensor.isCollision() && !leftWallSensor.isCollision())
             {
                 canWalkLeft = true;
             }
@@ -145,7 +149,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
                 canWalkLeft = false;
             }
 
-            if (rightWalkSensor.isCollision())
+            if (rightWalkSensor.isCollision() && !rightWallSensor.isCollision())
             {
                 canWalkRight = true;
             }
@@ -185,11 +189,11 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
             if (spriteData.flipX)
             {
-                attackHitbox.gameObject.GetComponent<PolygonCollider2D>().transform.eulerAngles = new Vector3(0, 0, 0);
+                attackHitbox.gameObject.GetComponent<Collider2D>().transform.eulerAngles = new Vector3(0, 0, 0);
             }
             else
             {
-                attackHitbox.gameObject.GetComponent<PolygonCollider2D>().transform.eulerAngles = new Vector3(0, 180, 0);
+                attackHitbox.gameObject.GetComponent<Collider2D>().transform.eulerAngles = new Vector3(0, 180, 0);
             }
         }
         else
@@ -202,7 +206,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     {
         canMove = false;
         animator.SetBool("Walking", false);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(pauseMovementTime);
         canMove = true;
         walkDirection = walkDirection * -1;
         spriteData.flipX = !spriteData.flipX;

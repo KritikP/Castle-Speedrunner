@@ -28,12 +28,15 @@ public class Player_Health : MonoBehaviour, IDamagable
     {
         if (player.health <= 0)
         {
-            //Debug.Log("Dead");
-            player.isDead = true;
-            fade = fade - Time.deltaTime * 0.3f;
-            gameObject.layer = 9;   //Dead enemies layer
-            animator.SetTrigger("Death");
+            if (!player.isDead)
+            {
+                player.isDead = true;
+                animator.SetBool("isDead", true);
+                animator.SetTrigger("Death");
+                gameObject.layer = 9;   //Dead enemies layer
+            }
 
+            fade = fade - Time.deltaTime * 0.3f;
             Color c = spriteData.color;
             c.a = fade;
             spriteData.color = c;
@@ -47,11 +50,22 @@ public class Player_Health : MonoBehaviour, IDamagable
         if (!player.invincible)
         {
             player.health -= damage;
-            animator.SetTrigger("Hurt");
-            player.invincible = true;
-            Debug.Log("Took Damage, Health = " + player.health);
-            body2d.velocity = new Vector2(0f, body2d.velocity.y);
-            StartCoroutine(InvincibilityFrames());
+
+            if (player.health > 0)
+            {
+                animator.SetTrigger("Hurt");
+                player.invincible = true;
+                Debug.Log("Took Damage, Health = " + player.health);
+                body2d.velocity = new Vector2(0f, body2d.velocity.y);
+                StartCoroutine(InvincibilityFrames());
+            }
+            else
+            {
+                //Dying
+                Debug.Log("Dying, Health = " + player.health);
+                body2d.velocity = new Vector2(0f, body2d.velocity.y);
+            }
+            
         }
         
     }

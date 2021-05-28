@@ -25,6 +25,7 @@ public class Player_Data : ScriptableObject
     private void OnEnable()
     {
         health = maxHealth;
+        isDead = false;
         invincible = false;
         coins = 0;
     }

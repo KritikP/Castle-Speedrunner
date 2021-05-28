@@ -56,7 +56,6 @@ public class LevelCreation : MonoBehaviour
     private void CreateRoomBase(MapSection map)
     {
         int tileNum = 0;
-        int totalSpikes = width - 6;
         
         map.yTopBorder = map.height - 2;
         map.yBottomBorder = 1;
@@ -162,9 +161,8 @@ public class LevelCreation : MonoBehaviour
         for(int i = 0; i < maxTrapsPerRoom; i++)
         {
             trapSpawner.SpawnShurikenTrap(new Vector3(map.basePosition.x + 10 + i * trapSectionWidth + 0.5f, map.yBottomBorder, 0));
-            map.SetTile(9 + i * trapSectionWidth, map.yBottomBorder, 593, map.mapArray);
-            map.SetTile(10 + i * trapSectionWidth, map.yBottomBorder, -1, map.mapArray);
-            map.SetTile(11 + i * trapSectionWidth, map.yBottomBorder, 578, map.mapArray);
+            map.SetTile(10 + i * trapSectionWidth, map.yBottomBorder, 505, map.mapArray);
+            map.SetTile(10 + i * trapSectionWidth, map.yBottomBorder - 1, 537, map.mapArray);
 
         }
     }
@@ -250,16 +248,16 @@ public class LevelCreation : MonoBehaviour
             //Debug.Log("Number of blocks generating: " + platformLength);
             for (int i = 0; i < platformLength - 1; i++)
             {
-                map.SetTile(col + i, row, platformTile, true, map.mapArray);
+                map.SetTile(col + i, row, platformTile, map.mapArray);
                 platformTile++;
                 if (platformTile > 58)
                     platformTile = 53;
             }
 
             if (platformLength != 1)
-                map.SetTile(col + platformLength - 1, row, 59, true, map.mapArray);
+                map.SetTile(col + platformLength - 1, row, 59, map.mapArray);
             else if (platformLength == 1)
-                map.SetTile(col + platformLength - 1, row, 52, true, map.mapArray);
+                map.SetTile(col + platformLength - 1, row, 52, map.mapArray);
 
             //Set enemies
             if(enemyCount < maxEnemiesPerRoom && platformLength > 2)
@@ -295,9 +293,9 @@ public class LevelCreation : MonoBehaviour
         map.exit = new Vector2Int(map.width - 3, pathPos.y);
 
         //Chisel and set exit area
-        map.SetTile(width - 2, pathPos.y, 578, true, map.mapArray);
+        map.SetTile(width - 2, pathPos.y, 578, map.mapArray);
         map.SetTile(width - 2, pathPos.y + 5, 291, map.mapArray);
-        map.SetTile(width - 1, pathPos.y, 1089, true, map.mapArray);
+        map.SetTile(width - 1, pathPos.y, 1089, map.mapArray);
         map.SetTile(width - 1, pathPos.y + 5, 1089, map.mapArray);
         for(int i = 1; i < 5; i++)
         {
@@ -314,7 +312,7 @@ public class LevelCreation : MonoBehaviour
         int glowTile = 1090;
         for(int i = 0; i < map.width; i++)
         {
-            map.SetTile(map.entrance.x + i, map.entrance.y, glowTile, true, map.mapArray);
+            map.SetTile(map.entrance.x + i, map.entrance.y, glowTile, map.mapArray);
             map.SetTile(map.entrance.x + i, map.entrance.y + 5, glowTile, map.mapArray);
         }
         map.exit = new Vector2Int(map.width - 1, map.entrance.y);
@@ -323,13 +321,14 @@ public class LevelCreation : MonoBehaviour
     private void DecorateBackground(MapSection map)
     {
         //Start with ground objects
-        Vector2Int pos = new Vector2Int(map.xLeftBorder + 2 - map.basePosition.x, map.yBottomBorder - map.basePosition.y);
+        Vector2Int pos = new Vector2Int(map.xLeftBorder + 2, map.yBottomBorder + 1);
         TileObjects temp;
 
-        while (pos.x < width)
+        while (pos.x < map.width - 3)
         {
             temp = tileObjects.GetRandomGroundedTileObject();
-            map.AddObject(pos.x, pos.y, map, map.decorationsArray, temp);
+            if (map.AddObject(pos.x, pos.y, map, map.decorationsArray, temp) != 0)
+                break;
             pos.x += temp.width + rand.Next(8, 14);
         }
         
@@ -481,18 +480,42 @@ public class LevelCreation : MonoBehaviour
             newMapEntrance = new Vector2Int(2, mapData.mapSections[currentRoom].exit.y);
             currentRoom++;
         }
-
+ 
         Debug.Log("New map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
+        mapData.mapSections[currentRoom].exit = new Vector2Int(mapData.mapSections[currentRoom].width - 3, 2);
         mapData.mapSections[currentRoom].entrance = newMapEntrance;
         CreateRoomBase(mapData.mapSections[currentRoom]);
         CreateStandardRoom(mapData.mapSections[currentRoom]);
+        CreateTrapFloor(mapData.mapSections[currentRoom]);
+        Debug.Log("X left border " + mapData.mapSections[currentRoom].xLeftBorder);
+
+        DecorateBackground(mapData.mapSections[currentRoom]);
         RenderMap(mapData.mapSections[currentRoom]);
     }
 
-    private void CreateStandardRoom(MapSection mapSection)
+    private void CreateStandardRoom(MapSection map)
     {
-        DecorateBackground(mapSection);
+        //Chisel and set exit area
+        map.SetTile(width - 2, 2, 578, map.mapArray);
+        map.SetTile(width - 2, 2 + 5, 291, map.mapArray);
+        map.SetTile(width - 1, 2, 1089, map.mapArray);
+        map.SetTile(width - 1, 2 + 5, 1089, map.mapArray);
+        for (int i = 1; i < 5; i++)
+        {
+            map.SetTile(map.width - 2, 2 + i, -1, map.mapArray);
+            map.SetTile(map.width - 1, 2 + i, -1, map.mapArray);
+        }
+        Instantiate(glowTile2, new Vector3(map.basePosition.x + map.width - 1 + 0.5f, map.exit.y + 0.5f, 0), Quaternion.identity);
+        Instantiate(glowTile2, new Vector3(map.basePosition.x + map.width - 1 + 0.5f, map.exit.y + 0.5f + 5, 0), Quaternion.identity);
+
+        //Set enemies
+        int enemySpawnGap = (map.width - 4) / maxEnemiesPerRoom;
+        for(int i = 0; i < maxEnemiesPerRoom; i++)
+        {
+            //Spawn
+            map.SetEnemy(i * enemySpawnGap + 4, map.yBottomBorder + 1, enemiesList[rand.Next(0, enemiesList.Length)], map.mapArray);
+        }
     }
 
     // Start is called before the first frame update
@@ -528,6 +551,7 @@ public class LevelCreation : MonoBehaviour
         {
             AddTransitionRoom();
             AddTrappedSpikeRoom();
+            //AddStandardRoom();
         }
     }
 }

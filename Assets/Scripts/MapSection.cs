@@ -49,35 +49,35 @@ public class MapSection
 
     public int SetEnemy(int x, int y, GameObject enemy, MapTile[] arr)
     {
-        if (-1 < y * width + x || y * width + x < width * height)
+        if (-1 < y * width + x && y * width + x < width * height)
         {
             arr[y * width + x].enemy = enemy;
             return 0;
         }
         else
         {
-            Debug.Log("Set enemy out of bounds at (" + x + ", " + y + ")");
+            Debug.LogWarning("'Set enemy' is out of bounds at (" + x + ", " + y + ")");
             return -1;
         }
     }
 
     public int SetTile(int x, int y, int tileValue, MapTile[] arr)
     {
-        if (-1 < y * width + x || y * width + x < width * height)
+        if (-1 < y * width + x && y * width + x < width * height)
         {
             arr[y * width + x].tileNum = tileValue;
             return 0;
         }
         else
         {
-            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
+            Debug.LogWarning("'Set tile' is out of bounds at (" + x + ", " + y + ")");
             return -1;
         }
     }
 
     public int SetTile(int x, int y, int tileValue, int tilePallete, MapTile[] arr)
     {
-        if (-1 < y * width + x || y * width + x < width * height)
+        if (-1 < y * width + x && y * width + x < width * height)
         {
             arr[y * width + x].tileNum = tileValue;
             arr[y * width + x].palette = tilePallete;
@@ -85,61 +85,29 @@ public class MapSection
         }
         else
         {
-            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
+            Debug.LogWarning("'Set tile' is out of bounds at (" + x + ", " + y + ")");
             return -1;
         }
-    }
-
-    public int SetTile(int x, int y, int tileValue, bool walkable, MapTile[] arr)
-    {
-        if (-1 < y * width + x || y * width + x < width * height)
-        {
-            arr[y * width + x].tileNum = tileValue;
-            //arr[y * width + x].walkable = walkable;
-            return 0;
-        }
-        else
-        {
-            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
-            return -1;
-        }
-
-    }
-
-    public int SetTile(int x, int y, int tileValue, int tilePallete, bool walkable, MapTile[] arr)
-    {
-        if (-1 < y * width + x || y * width + x < width * height)
-        {
-            arr[y * width + x].tileNum = tileValue;
-            arr[y * width + x].palette = tilePallete;
-            //arr[y * width + x].walkable = walkable;
-            return 0;
-        }
-        else
-        {
-            Debug.Log("Set tile out of bounds at (" + x + ", " + y + ")");
-            return -1;
-        }
-
     }
 
     public MapTile GetTile(int x, int y, MapTile[] arr)
     {
-        if (-1 < y * width + x || y * width + x < width * height)
+        if (-1 < y * width + x && y * width + x < width * height)
             return arr[y * width + x];
         else
         {
-            Debug.Log("Get tile out of bounds at (" + x + ", " + y + ")");
+            Debug.LogWarning("'Get tile' out of bounds at (" + x + ", " + y + ")");
             return null;
         }
+        
     }
 
-    public void AddObject(int x, int y, MapSection map, MapTile[] layer, TileObjects obj)
+    public int AddObject(int x, int y, MapSection map, MapTile[] layer, TileObjects obj)
     {
         if (obj.width + x > width - 3 || obj.height + y > height - 3)
         {
-            Debug.Log("Object too big for specified location");
-            return;
+            Debug.LogWarning("Object " + obj.name + " too big for specified location (" + x + ", " + y + ")");
+            return -1;
         }
 
         for (int xi = 0; xi < obj.width; xi++)
@@ -153,6 +121,7 @@ public class MapSection
                 }
             }
         }
+        return 0;
     }
 
 }
@@ -161,14 +130,12 @@ public class MapTile
 {
     public int tileNum;
     public int palette;
-    //public bool walkable;
     public GameObject enemy;
 
     public MapTile()
     {
         this.tileNum = 0;
         this.palette = 1;
-        //this.walkable = false;
         this.enemy = null;
     }
 
