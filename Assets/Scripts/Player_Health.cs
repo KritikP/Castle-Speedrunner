@@ -28,6 +28,7 @@ public class Player_Health : MonoBehaviour, IDamagable
     {
         if (player.health <= 0)
         {
+            body2d.velocity = new Vector2(0f, body2d.velocity.y);
             if (!player.isDead)
             {
                 player.isDead = true;
@@ -63,7 +64,6 @@ public class Player_Health : MonoBehaviour, IDamagable
             {
                 //Dying
                 Debug.Log("Dying, Health = " + player.health);
-                body2d.velocity = new Vector2(0f, body2d.velocity.y);
             }
             
         }

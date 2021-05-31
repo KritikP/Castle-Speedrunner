@@ -27,7 +27,6 @@ public class Player_Data : ScriptableObject
         health = maxHealth;
         isDead = false;
         invincible = false;
-        coins = 0;
     }
 
 }

@@ -1,11 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class AI_Goblin : Enemy_Handler
 {
-
     // Start is called before the first frame update
     private void Start()
     {

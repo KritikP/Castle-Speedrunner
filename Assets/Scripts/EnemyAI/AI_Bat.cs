@@ -8,7 +8,6 @@ public class AI_Bat : Enemy_Handler
     void Start()
     {
         InitEnemy();
-        spriteData.flipX = !spriteData.flipX;
     }
 
     // Update is called once per frame

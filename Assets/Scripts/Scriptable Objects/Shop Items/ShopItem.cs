@@ -8,7 +8,7 @@ public class ShopItem : ScriptableObject
     public string itemName;
     public string description;
     public int[] price;
-    [Range(1, 3)] public int level;
+    [Range(0, 3)] public int level;
     public Sprite[] itemImage;
 
 }

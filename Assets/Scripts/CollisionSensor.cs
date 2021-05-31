@@ -4,34 +4,34 @@ using UnityEngine;
 
 public class CollisionSensor : MonoBehaviour
 {
-    protected bool collisionCount;
-    public int layerMask;
+    protected int collisionCount = 0;
+    [SerializeField] public LayerMask layerMask;
 
     private void Start()
     {
-        collisionCount = false;
+        collisionCount = 0;
     }
 
     public bool isCollision()
     {
-        return collisionCount;
+        return collisionCount > 0;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == layerMask)
+        if (1 << other.gameObject.layer == layerMask)
         {
-            collisionCount = true;
-            //Debug.Log("Collision = true");
+            collisionCount++;
+            //Debug.Log("Collision enter");
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.layer == layerMask)
+        if (1 << other.gameObject.layer == layerMask)
         {
-            collisionCount = false;
-            //Debug.Log("Collision = false");
+            collisionCount--;
+            //Debug.Log("Collision exit");
         }
     }
 }

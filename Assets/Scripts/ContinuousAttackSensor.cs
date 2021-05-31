@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AttackSensor : CollisionSensor
+public class ContinuousAttackSensor : CollisionSensor
 {
     public UnityEvent attackEvent;
     public bool attacking = false;
@@ -19,6 +19,8 @@ public class AttackSensor : CollisionSensor
                 attackEvent.Invoke();
             }
         }
+        //Debug.Log(other.gameObject.layer);
+        //Debug.Log(layerMask.value);
 
     }
 }

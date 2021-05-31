@@ -32,7 +32,7 @@ RectTransform:
   m_Children:
   - {fileID: 5081321136946418246}
   m_Father: {fileID: 7017589001550409064}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -129,7 +129,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 7017589001550409064}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &1178435387
 PolygonCollider2D:
@@ -156,11 +156,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1.1959778, y: 0.1493988}
-      - {x: -2.418396, y: -0.7351303}
-      - {x: -2.4697485, y: -1.229454}
-      - {x: 0, y: -1.6068344}
-      - {x: 0, y: 0.8687}
+    - - {x: -0.3, y: 0.66019607}
+      - {x: 2.418396, y: -0.7351303}
+      - {x: 2.469748, y: -1.229454}
+      - {x: -0.3, y: -1.6068344}
 --- !u!114 &1178435388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717a67944a816aa47ae33f44ab9fcf57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask: 10
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   attackEvent:
     m_PersistentCalls:
       m_Calls:
@@ -188,6 +189,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  attacking: 0
 --- !u!1 &1361981088
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +250,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca30ffbf85912d745a27451fdb45e835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask: 11
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &459872132923139707
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +283,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7017589001550409064}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1985740881500367008
 MonoBehaviour:
@@ -293,7 +297,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca30ffbf85912d745a27451fdb45e835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask: 11
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!70 &1225415765
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -370,7 +376,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca30ffbf85912d745a27451fdb45e835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask: 11
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &5081321135238897011
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +659,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7017589001550409064}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3861563322528286647
 MonoBehaviour:
@@ -665,7 +673,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca30ffbf85912d745a27451fdb45e835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask: 11
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!70 &1225415766
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -716,10 +726,10 @@ Transform:
   m_Children:
   - {fileID: 545270730823463192}
   - {fileID: 1361981089}
-  - {fileID: 1178435386}
-  - {fileID: 319391078}
   - {fileID: 6220712463238922637}
   - {fileID: 4133622256388751209}
+  - {fileID: 1178435386}
+  - {fileID: 319391078}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -765,7 +775,7 @@ SpriteRenderer:
   m_Sprite: {fileID: 4723107735738678597, guid: c1cdd26cc09ad224884556bc4d8296ae,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.5, y: 1.5}
@@ -843,6 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMovementTime: 1
+  pauseAttackTime: 0.2
   leftWalkSensor: {fileID: 321742406}
   rightWalkSensor: {fileID: 1361981091}
   leftWallSensor: {fileID: 3861563322528286647}

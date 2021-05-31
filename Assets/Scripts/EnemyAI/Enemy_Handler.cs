@@ -15,26 +15,28 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
     protected ContactFilter2D playerFilter;
     protected float fade = 1f;
-    protected int playerMask;
-    protected int groundMask;
     
     //State data
     protected int walkDirection;
     protected bool canWalkLeft;
     protected bool canWalkRight;
     protected bool canMove;
-    protected bool dead;
+    protected bool dead = false;
 
     [SerializeField] protected float pauseMovementTime = 1f;
+    [SerializeField] protected float pauseAttackTime = 0.2f;
     [SerializeField] protected CollisionSensor leftWalkSensor;
     [SerializeField] protected CollisionSensor rightWalkSensor;
     [SerializeField] protected CollisionSensor leftWallSensor;
     [SerializeField] protected CollisionSensor rightWallSensor;
-    [SerializeField] protected AttackSensor attackHitbox;
+    [SerializeField] protected CollisionSensor attackHitbox;
     [SerializeField] protected Enemy_Data enemyData;
     [SerializeField] protected Player_Data playerData;
     [SerializeField] private Map_Data mapData;
     [SerializeField] private EnemyHealthBar healthBar;
+
+    protected LayerMask playerMask;
+    protected LayerMask groundMask;
 
     private int room;
 
@@ -43,6 +45,13 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         health -= damage;
         healthBar.SetHealth(health);
         animator.SetTrigger("Hurt");
+    }
+
+    private IEnumerator AttackPause()
+    {
+        animator.speed = 0;
+        yield return new WaitForSeconds(pauseAttackTime);
+        animator.speed = 1;
     }
 
     protected void CheckForDeath()
@@ -102,14 +111,20 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         canMove = false;
     }
 
+    private void ResetAttackState()
+    {
+        attackHitbox.GetComponent<AttackSensor>().attacking = false;
+    }
+
     protected void InitEnemy()
     {
         room = mapData.currentRoom;
-        groundMask = 11;
-        playerMask = (int)Mathf.Log(playerData.playerLayer.value, 2f);
         dead = false;
-        walkDirection = -1;
+        walkDirection = 1;
         canMove = true;
+
+        playerMask = LayerMask.GetMask("Player");
+        groundMask = LayerMask.GetMask("Ground");
 
         animator = GetComponent<Animator>();
         spriteData = GetComponent<SpriteRenderer>();
@@ -177,17 +192,17 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
                 animator.SetBool("Walking", true);
                 if (walkDirection == 0)
                 {
-                    if (canWalkLeft)
-                        walkDirection = -1;
-                    else
+                    if (canWalkRight)
                         walkDirection = 1;
+                    else
+                        walkDirection = -1;
                 }
                 //Else, keep going
             }
 
             body2d.velocity = new Vector2(walkDirection * moveSpeed, body2d.velocity.y);
 
-            if (spriteData.flipX)
+            if (!spriteData.flipX)
             {
                 attackHitbox.gameObject.GetComponent<Collider2D>().transform.eulerAngles = new Vector3(0, 0, 0);
             }

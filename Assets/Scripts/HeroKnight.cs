@@ -51,13 +51,12 @@ public class HeroKnight : MonoBehaviour {
     {
         contactFilter2d = new ContactFilter2D();
         contactFilter2d.SetLayerMask(enemyLayer);
-
-        Physics2D.IgnoreLayerCollision(9, 10);  //Ignore collisions between player and dead enemies
-        Physics2D.IgnoreLayerCollision(8, 10);  //Ignore collisions between player and enemies
+        Physics2D.IgnoreLayerCollision(9, 10);  //Ignore collisions between dead enemies and player
+        Physics2D.IgnoreLayerCollision(8, 10);  //Ignore collisions between enemies and player
+        Physics2D.IgnoreLayerCollision(8, 9);  //Ignore collisions between enemies and dead enemies
         Physics2D.IgnoreLayerCollision(8, 8);  //Ignore collisions between enemies
         Physics2D.IgnoreLayerCollision(9, 9);  //Ignore collisions between dead enemies
-
-
+        Physics2D.IgnoreLayerCollision(12, 12);  //Ignore collisions between hitboxes
     }
 
     // Update is called once per frame

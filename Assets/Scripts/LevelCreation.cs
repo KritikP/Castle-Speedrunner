@@ -550,8 +550,8 @@ public class LevelCreation : MonoBehaviour
         if (!player.isDead && player.playerPosition.position.x > mapData.mapSections[currentRoom].basePosition.x + 0.5f * mapData.mapSections[currentRoom].width)
         {
             AddTransitionRoom();
-            AddTrappedSpikeRoom();
-            //AddStandardRoom();
+            //AddTrappedSpikeRoom();
+            AddStandardRoom();
         }
     }
 }
