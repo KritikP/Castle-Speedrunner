@@ -35,16 +35,29 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     [SerializeField] private Map_Data mapData;
     [SerializeField] private EnemyHealthBar healthBar;
 
+    [SerializeField] private Material flashMat;
+
     protected LayerMask playerMask;
     protected LayerMask groundMask;
 
     private int room;
+    private float flashTime = 0.05f;
 
     public void TakeDamage(int damage)
     {
         health -= damage;
         healthBar.SetHealth(health);
         animator.SetTrigger("Hurt");
+        StartCoroutine(HitFlash());
+    }
+    
+    private IEnumerator HitFlash()
+    {
+        
+        Material mat = spriteData.material;
+        spriteData.material = flashMat;
+        yield return new WaitForSeconds(flashTime);
+        spriteData.material = mat;
     }
 
     private IEnumerator AttackPause()
@@ -58,12 +71,16 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     {
         if (health <= 0)
         {
-            //Debug.Log("Dead");
-            dead = true;
+            if (!dead)
+            {
+                animator.SetTrigger("Death");
+                animator.SetBool("isDead", true);
+                StopCoroutine(PauseMovementRoutine());
+                dead = true;
+                gameObject.layer = 9;   //Dead enemies layer
+            }
+
             fade = fade - Time.deltaTime * 0.3f;
-            gameObject.layer = 9;   //Dead enemies layer
-            animator.SetTrigger("Death");
-            
             Color c = spriteData.color;
             c.a = fade;
             spriteData.color = c;
@@ -215,6 +232,16 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         {
             body2d.velocity = new Vector2(0, body2d.velocity.y);
         }
+
+        if(walkDirection == 1)
+        {
+            spriteData.flipX = false;
+        }
+        else if (walkDirection == -1)
+        {
+            spriteData.flipX = true;
+        }
+
     }
 
     private IEnumerator PauseMovementRoutine()
@@ -224,7 +251,6 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         yield return new WaitForSeconds(pauseMovementTime);
         canMove = true;
         walkDirection = walkDirection * -1;
-        spriteData.flipX = !spriteData.flipX;
     }
 
 }

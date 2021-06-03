@@ -22,7 +22,7 @@ public class Player_Data : ScriptableObject
 
     public int                      coins = 0;
 
-    private void OnEnable()
+    void OnEnable()
     {
         health = maxHealth;
         isDead = false;

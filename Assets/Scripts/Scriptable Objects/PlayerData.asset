@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   maxHealth: 100
-  health: 55
+  health: 100
   invincible: 0
   isBlocking: 0
   invincibilityTime: 1

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player_Health : MonoBehaviour, IDamagable
 {
     [SerializeField] private Player_Data player;
+
     private SpriteRenderer spriteData;
     private Animator animator;
     private Rigidbody2D body2d;
@@ -17,6 +18,8 @@ public class Player_Health : MonoBehaviour, IDamagable
         animator = GetComponent<Animator>();
         body2d = GetComponent<Rigidbody2D>();
         player.health = player.maxHealth;
+        player.isDead = false;
+        player.invincible = false;
     }
 
     private void Update()
@@ -31,6 +34,7 @@ public class Player_Health : MonoBehaviour, IDamagable
             body2d.velocity = new Vector2(0f, body2d.velocity.y);
             if (!player.isDead)
             {
+                FindObjectOfType<GameUIManager>().PlayerDeath();
                 player.isDead = true;
                 animator.SetBool("isDead", true);
                 animator.SetTrigger("Death");

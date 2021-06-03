@@ -208,7 +208,7 @@ RectTransform:
   m_Children:
   - {fileID: 604134612}
   m_Father: {fileID: 1054505067963373522}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 1054505067921435692}
   - component: {fileID: 1054505067921435693}
   m_Layer: 0
-  m_Name: LeftWalkSensor
+  m_Name: Left Walk Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -446,10 +446,10 @@ Transform:
   m_Children:
   - {fileID: 1054505067921435683}
   - {fileID: 1054505068913895900}
-  - {fileID: 1054505068565753778}
-  - {fileID: 1394827775}
   - {fileID: 4637703609506691105}
   - {fileID: 4694327309847130184}
+  - {fileID: 1054505068565753778}
+  - {fileID: 1394827775}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -583,6 +583,7 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: e13674d5e6a82654984b359a45fe38c5, type: 2}
   mapData: {fileID: 11400000, guid: c9afdc969ba719e4eb2191f4a81e1782, type: 2}
   healthBar: {fileID: 604134613}
+  flashMat: {fileID: 2100000, guid: 623e86c4414f5bc419d72da91f88bab5, type: 3}
 --- !u!1 &1054505068565753779
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +614,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1054505067963373522}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1054505068565753776
 CircleCollider2D:
@@ -660,6 +661,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  attacking: 0
 --- !u!1 &1054505068913895903
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,7 +674,7 @@ GameObject:
   - component: {fileID: 1054505068913895901}
   - component: {fileID: 1054505068913895902}
   m_Layer: 0
-  m_Name: RightWalkSensor
+  m_Name: Right Walk Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -735,7 +737,7 @@ GameObject:
   - component: {fileID: 5125324010971414056}
   - component: {fileID: 377680044121956640}
   m_Layer: 0
-  m_Name: RightWallSensor
+  m_Name: Right Wall Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -753,7 +755,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1054505067963373522}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5125324010971414056
 MonoBehaviour:
@@ -798,7 +800,7 @@ GameObject:
   - component: {fileID: 3754533696268139906}
   - component: {fileID: 4378160989921857008}
   m_Layer: 0
-  m_Name: LeftWallSensor
+  m_Name: Left Wall Sensor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -816,7 +818,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1054505067963373522}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3754533696268139906
 MonoBehaviour:

@@ -6,6 +6,7 @@ using TMPro;
 public class Timer : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Player_Data playerData;
     float time;
 
     // Start is called before the first frame update
@@ -18,7 +19,10 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time += Time.smoothDeltaTime;
-        text.text = time.ToString("F0");
+        if (!playerData.isDead)
+        {
+            time += Time.smoothDeltaTime;
+            text.text = time.ToString("F0");
+        }
     }
 }

@@ -29,6 +29,11 @@ public class AI_FireWorm : Enemy_Handler
     {
         Movement();
         CheckForDeath();
-        
+
+        //Set fireball spawn position
+        if (!spriteData.flipX && fireballSpawnPosition.localPosition.x < 0 || spriteData.flipX && fireballSpawnPosition.localPosition.x > 0)
+        {
+            fireballSpawnPosition.localPosition = new Vector3(-fireballSpawnPosition.localPosition.x, fireballSpawnPosition.localPosition.y, fireballSpawnPosition.localPosition.z);
+        }
     }
 }

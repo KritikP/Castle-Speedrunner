@@ -20,8 +20,6 @@ public class RangedShot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.gameObject.layer);
-        Debug.Log(attackingLayerMask.value);
         if (1 << other.gameObject.layer == attackingLayerMask)
         {
             if (other.GetComponent<IDamagable>() != null)
