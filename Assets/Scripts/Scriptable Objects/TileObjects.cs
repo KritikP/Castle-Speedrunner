@@ -14,7 +14,8 @@ public class TileObjects : ScriptableObject
     [SerializeField] public bool isGrounded;
     [SerializeField] public bool hasGlow;
     [SerializeField] public Color glow;
+    [SerializeField] public GameObject glowObject;
+    [SerializeField] public Vector2 glowPosition;
     [SerializeField, Range(0, 3)] public int colorScheme;
     [SerializeField, Range(1, 2)] public int palette;
-
 }

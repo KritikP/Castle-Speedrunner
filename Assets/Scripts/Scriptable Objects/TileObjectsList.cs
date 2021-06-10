@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -96,6 +97,24 @@ public class TileObjectsList : ScriptableObject
         else
         {
             //Debug.Log("Object type " + name + " not found.");
+            return null;
+        }
+    }
+
+    public TileObjects GetTileObject(string name)
+    {
+        string typeName = name.Substring(0, name.LastIndexOf('_'));
+        if (tileObjects.ContainsKey(name.Substring(0, name.LastIndexOf('_'))))
+        {
+            return tileObjects[typeName].Find(item => item.name == name);
+        }
+        else if (groundedTileObjects.ContainsKey(name.Substring(0, name.LastIndexOf('_'))))
+        {
+            return groundedTileObjects[typeName].Find(item => item.name == name);
+        }
+        else
+        {
+            Debug.LogWarning("GetTileObject failed for name: " + name);
             return null;
         }
     }

@@ -23,7 +23,6 @@ public class HeroKnight : MonoBehaviour {
     private bool                grounded = false;
     private bool                rolling = false;
     private bool                jumping = false;
-    private bool                canMove = true;
     private int                 facingDirection = 1;
     private int                 currentAttack = 0;
     private int                 totalJumps;
@@ -34,7 +33,6 @@ public class HeroKnight : MonoBehaviour {
 
     private void Awake()
     {
-        player.playerPosition = transform;
         animator = GetComponent<Animator>();
         body2d = GetComponent<Rigidbody2D>();
         groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_HeroKnight>();
@@ -42,7 +40,6 @@ public class HeroKnight : MonoBehaviour {
         wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
-        player.playerPosition = GetComponent<Transform>();
         audioManager = FindObjectOfType<AudioManager>();
     }
 
@@ -57,21 +54,30 @@ public class HeroKnight : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(8, 8);  //Ignore collisions between enemies
         Physics2D.IgnoreLayerCollision(9, 9);  //Ignore collisions between dead enemies
         Physics2D.IgnoreLayerCollision(12, 12);  //Ignore collisions between hitboxes
+        audioManager.Play("Level Music");
+
+        player.stamina = player.maxStamina;
     }
 
     // Update is called once per frame
     void Update ()
     {
-        player.playerPosition = transform;
         // Increase timer that controls attack combo
         timeSinceAttack += Time.deltaTime;
         timeSinceRoll += Time.deltaTime;
 
         if (!player.isDead)
         {
-            if(rolling && timeSinceRoll > 0.5f)
+            if(rolling && timeSinceRoll > 0.57f)
             {
                 rolling = false;
+                player.rolling = false;
+                player.invincible = false;
+            }
+
+            if (player.stamina < player.maxStamina && timeSinceRoll > 1.5f)
+            {
+                player.stamina += Time.deltaTime * player.staminaRecoverySpeed;
             }
 
             //Check if character just landed on the ground
@@ -80,7 +86,7 @@ public class HeroKnight : MonoBehaviour {
                 grounded = true;
                 animator.SetBool("Grounded", grounded);
             }
-
+            
             //Check if character just started falling
             if (grounded && !groundSensor.State())
             {
@@ -111,7 +117,7 @@ public class HeroKnight : MonoBehaviour {
                 attackHitbox.transform.localPosition = new Vector2(attackHitbox.transform.localPosition.x * -1, attackHitbox.transform.localPosition.y);
 
             // Move
-            if (!rolling && timeSinceAttack > 0.5f && canMove)
+            if (!rolling && timeSinceAttack > 0.5f && player.canMove)
                 body2d.velocity = new Vector2(inputX * player.speed, body2d.velocity.y);
 
             //Set AirSpeed in animator
@@ -174,22 +180,25 @@ public class HeroKnight : MonoBehaviour {
                 animator.SetTrigger("Block");
                 animator.SetBool("IdleBlock", true);
                 body2d.velocity = new Vector2(0, body2d.velocity.y);
-                canMove = false;
+                player.canMove = false;
             }
 
             else if (Input.GetMouseButtonUp(1) && !rolling)
             {
                 animator.SetBool("IdleBlock", false);
-                canMove = true;
+                player.canMove = true;
             }
 
             // Roll
-            else if (Input.GetKeyDown("left shift") && !rolling && grounded)
+            else if (Input.GetKeyDown("left shift") && !rolling && grounded && player.stamina > 33)
             {
+                player.invincible = true;
                 timeSinceRoll = 0f;
                 rolling = true;
+                player.rolling = true;
                 animator.SetTrigger("Roll");
                 body2d.velocity = new Vector2(facingDirection * player.rollSpeed, body2d.velocity.y);
+                player.stamina -= 33;
             }
 
             //Jump
@@ -243,6 +252,8 @@ public class HeroKnight : MonoBehaviour {
     void AE_ResetRoll()
     {
         rolling = false;
+        player.rolling = false;
+        player.invincible = false;
     }
 
     // Called in slide animation.
@@ -262,6 +273,17 @@ public class HeroKnight : MonoBehaviour {
             // Turn arrow in correct direction
             dust.transform.localScale = new Vector3(facingDirection, 1, 1);
         }
+    }
+
+    void DisableMovement()
+    {
+        body2d.velocity = new Vector2(0f, body2d.velocity.y);
+        player.canMove = false;
+    }
+
+    void EnableMovement()
+    {
+        player.canMove = true;
     }
 
     private void OnDrawGizmos()

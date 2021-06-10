@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6410942657261369767}
   - component: {fileID: 6410942657261369766}
   - component: {fileID: 1682878001457357770}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Trap_Shuriken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd9236f77b9a084f958f33934b4ab80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask: 10
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   damage: 20
   spinSpeed: 0
 --- !u!95 &6410942657261369766

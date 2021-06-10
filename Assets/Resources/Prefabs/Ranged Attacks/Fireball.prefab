@@ -120,6 +120,10 @@ MonoBehaviour:
   attackingLayerMask:
     serializedVersion: 2
     m_Bits: 1024
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  playerData: {fileID: 11400000, guid: e13674d5e6a82654984b359a45fe38c5, type: 2}
   damage: 10
 --- !u!58 &8822500702036976762
 CircleCollider2D:

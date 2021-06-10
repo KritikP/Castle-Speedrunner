@@ -11,18 +11,6 @@ public class TrapSpawner : MonoBehaviour
     [SerializeField] private Map_Data mapData;
     [SerializeField] private bool firing = true;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SpawnShurikenTrap(Vector3 position)
     {
         StartCoroutine(SpawnShuriken(position));

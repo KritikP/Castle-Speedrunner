@@ -192,7 +192,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
             if (!canWalkLeft && !canWalkRight)
             {
-                Debug.Log("Enemy stuck");
+                //Debug.Log("Enemy stuck");
                 animator.SetBool("Walking", false);
                 walkDirection = 0;
             }

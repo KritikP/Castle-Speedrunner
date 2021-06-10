@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20f74765105c2934c82e4de50208604f, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 100
+  maxHealth: 175
+  health: 175
+  maxStamina: 100
+  stamina: 100
   invincible: 0
   isBlocking: 0
+  rolling: 0
   invincibilityTime: 1
-  attackDamage: 20
+  baseAttackDamage: 20
+  attackDamage: 35
   speed: 7
   jumpSpeed: 8
   rollSpeed: 10
@@ -27,5 +31,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   isDead: 0
-  playerPosition: {fileID: 0}
-  coins: 164
+  coins: 85
+  armorUpgrade: {fileID: 11400000, guid: fa3c2d485cb2b25439564b42f032bbd4, type: 2}
+  attackUpgrade: {fileID: 11400000, guid: b4739a5921dc1d846a2caaa77f9e84f7, type: 2}

@@ -8,9 +8,11 @@ public class RangedShot : MonoBehaviour
     private Collider2D attackHitbox;
     private Rigidbody2D body2d;
     public LayerMask attackingLayerMask;
+    public LayerMask groundLayerMask;
+    public Player_Data playerData;
 
     [HideInInspector] public int damage = 10;
-
+    
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -22,12 +24,17 @@ public class RangedShot : MonoBehaviour
     {
         if (1 << other.gameObject.layer == attackingLayerMask)
         {
-            if (other.GetComponent<IDamagable>() != null)
+            if (other.GetComponent<IDamagable>() != null && !playerData.invincible)
             {
                 other.GetComponent<IDamagable>().TakeDamage(damage);
                 animator.SetTrigger("Hit");
                 body2d.velocity = new Vector2(0, 0);
             }
+        }
+        else if (1 << other.gameObject.layer == groundLayerMask)
+        {
+            animator.SetTrigger("Hit");
+            body2d.velocity = new Vector2(0, 0);
         }
     }
 

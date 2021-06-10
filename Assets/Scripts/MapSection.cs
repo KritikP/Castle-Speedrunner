@@ -21,9 +21,6 @@ public class MapSection
     public int yTopBorder { get; set; }
     public int yBottomBorder { get; set; }
 
-    public char ent;
-    public char ext;
-    
     public MapSection(int h, int w, Vector2Int basePosition)
     {
         this.basePosition = basePosition;
@@ -42,9 +39,6 @@ public class MapSection
             backgroundArray[i] = new MapTile();
             decorationsArray[i] = new MapTile();
         }
-
-        ent = 'w';
-        ext = 'e';
     }
 
     public int SetEnemy(int x, int y, GameObject enemy, MapTile[] arr)

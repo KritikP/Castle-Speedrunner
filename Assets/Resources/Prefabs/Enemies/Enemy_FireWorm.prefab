@@ -582,7 +582,7 @@ MonoBehaviour:
   mapData: {fileID: 11400000, guid: c9afdc969ba719e4eb2191f4a81e1782, type: 2}
   healthBar: {fileID: 5966823842609755790}
   flashMat: {fileID: 2100000, guid: 623e86c4414f5bc419d72da91f88bab5, type: 3}
-  fireballSpeed: 7
+  fireballSpeed: 8
   fireballSpawnPosition: {fileID: 2079778889}
 --- !u!1 &3313185237180456509
 GameObject:
