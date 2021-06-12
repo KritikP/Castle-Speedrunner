@@ -54,6 +54,7 @@ public class HeroKnight : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(8, 8);  //Ignore collisions between enemies
         Physics2D.IgnoreLayerCollision(9, 9);  //Ignore collisions between dead enemies
         Physics2D.IgnoreLayerCollision(12, 12);  //Ignore collisions between hitboxes
+
         audioManager.Play("Level Music");
 
         player.stamina = player.maxStamina;

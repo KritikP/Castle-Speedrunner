@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155c93801f5bbca48b3ae1e76fe937e7, type: 3}
   m_Name: MapData
   m_EditorClassIdentifier: 
+  currentRoom: 20

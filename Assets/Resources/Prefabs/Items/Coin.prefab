@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5830503751311106557}
   - component: {fileID: 5830503751311106556}
   - component: {fileID: 4335510224665822208}
+  - component: {fileID: 6021478900910278991}
   - component: {fileID: 2085169089}
   m_Layer: 13
   m_Name: Coin
@@ -113,12 +114,33 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 5.26
+--- !u!50 &6021478900910278991
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5830503751311106559}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 1
+  m_Material: {fileID: 6200000, guid: 96f3c529aa8026c47a066e364ca9c065, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!114 &2085169089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,3 +154,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: e13674d5e6a82654984b359a45fe38c5, type: 2}
+  body2d: {fileID: 6021478900910278991}

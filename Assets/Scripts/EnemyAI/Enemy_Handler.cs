@@ -7,11 +7,12 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected int health;
     protected float moveSpeed;
     protected int attackDamage;
-
+    protected ObjectPooler objectPooler;
     protected Animator animator;
     protected SpriteRenderer spriteData;
     protected Rigidbody2D body2d;
     protected Collider2D[] colliders;
+    private GameObject[] powerUpsList;
 
     protected ContactFilter2D playerFilter;
     protected float fade = 1f;
@@ -23,6 +24,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected bool canMove;
     protected bool dead = false;
 
+    [SerializeField] protected int droppedCoins = 5;
     [SerializeField] protected float pauseMovementTime = 1f;
     [SerializeField] protected float pauseAttackTime = 0.2f;
     [SerializeField] protected CollisionSensor leftWalkSensor;
@@ -32,13 +34,12 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     [SerializeField] protected CollisionSensor attackHitbox;
     [SerializeField] protected Enemy_Data enemyData;
     [SerializeField] protected Player_Data playerData;
-    [SerializeField] private Map_Data mapData;
     [SerializeField] private EnemyHealthBar healthBar;
-
     [SerializeField] private Material flashMat;
 
     protected LayerMask playerMask;
     protected LayerMask groundMask;
+    protected System.Random rand;
 
     private int room;
     private float flashTime = 0.05f;
@@ -53,7 +54,6 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     
     private IEnumerator HitFlash()
     {
-        
         Material mat = spriteData.material;
         spriteData.material = flashMat;
         yield return new WaitForSeconds(flashTime);
@@ -78,6 +78,17 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
                 StopCoroutine(PauseMovementRoutine());
                 dead = true;
                 gameObject.layer = 9;   //Dead enemies layer
+
+                for(int i = 0; i < droppedCoins; i++)
+                {
+                    GameObject spawnedCoin = objectPooler.SpawnFromPool("Coin", transform.position, Quaternion.identity);
+                    if(spawnedCoin != null)
+                    {
+                        spawnedCoin.GetComponent<Coin>().SetBodyType(RigidbodyType2D.Dynamic);
+                        spawnedCoin.GetComponent<Rigidbody2D>().velocity = new Vector2(rand.Next(-20, 20) * 0.2f, rand.Next(0, 20) * 0.3f);
+                    }
+                }
+                
             }
 
             fade = fade - Time.deltaTime * 0.3f;
@@ -135,7 +146,9 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
     protected void InitEnemy()
     {
-        room = mapData.currentRoom;
+        objectPooler = ObjectPooler.Instance;
+        rand = new System.Random();
+        powerUpsList = Resources.LoadAll<GameObject>("Prefabs/PowerUps");
         dead = false;
         walkDirection = 1;
         canMove = true;

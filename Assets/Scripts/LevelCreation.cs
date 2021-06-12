@@ -14,8 +14,10 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private TrapSpawner trapSpawner;
 
     private List<MapSection> maps;
+    private ObjectPooler objectPooler;
 
     [SerializeField] private Player_Data player;
+
     [SerializeField] private TileObjectsList tileObjects;
     private GameObject[] enemiesList;
 
@@ -26,7 +28,6 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private Vector2Int startingPosition = Vector2Int.zero;
     
     private int entrancePlatformLength = 4;
-    private int currentRoom;
     private System.Random rand = new System.Random();
 
     private int[] background1a = {357, 331, 300, 262, 221, 176, 135};
@@ -123,7 +124,7 @@ public class LevelCreation : MonoBehaviour
 
         //Chisel the entrance area
         
-        if (currentRoom != 0)
+        if (mapData.currentRoom != 0)
         {
             for(int x = 1; x >= 0; x--)
             {
@@ -206,7 +207,7 @@ public class LevelCreation : MonoBehaviour
         {
             platformTile = 52;
 
-            trajectories.Add(new Trajectory(pathPos, player.speed, player.jumpSpeed, player.fallMultiplier, true));
+            trajectories.Add(new Trajectory(pathPos, player.baseSpeed, player.jumpSpeed, player.fallMultiplier, true));
             numPoints = trajectories[platformCount].numPoints;
 
             int platformX;
@@ -274,12 +275,27 @@ public class LevelCreation : MonoBehaviour
 
             if(powerUpsCount < maxPowerUpsPerRoom)
             {
-                if (rand.Next(0, 100) < powerUpSpawnChance * 100)
+                if (rand.Next(0, 100) <  powerUpSpawnChance * 100)
                 {
                     TileObjects obj = tileObjects.GetTileObject("arch_small1");
                     if(map.AddObject(col + platformLength / 2, row + 2, map, map.decorationsArray, obj) == 0)
                     {
-                        Instantiate(obj.glowObject, new Vector3(map.basePosition.x + col + platformLength / 2 + obj.glowPosition.x, map.basePosition.y + row + 2 + obj.glowPosition.y), Quaternion.identity);
+                        GameObject powerUpCell = Instantiate(obj.glowObject, new Vector3(map.basePosition.x + col + platformLength / 2 + obj.glowPosition.x, map.basePosition.y + row + 2 + obj.glowPosition.y), Quaternion.identity);
+                        int power = rand.Next(0, 3);
+                        GameObject powerUp;
+                        if(power == 0)
+                        {
+                            powerUp = objectPooler.SpawnFromPool("PowerUp_Invincibility", powerUpCell.transform.position, Quaternion.identity);
+                        }
+                        else if(power == 1)
+                        {
+                            powerUp = objectPooler.SpawnFromPool("PowerUp_Invincibility", powerUpCell.transform.position, Quaternion.identity);
+                        }
+                        else
+                        {
+                            powerUp = objectPooler.SpawnFromPool("PowerUp_Invincibility", powerUpCell.transform.position, Quaternion.identity);
+                        }
+                        powerUp.GetComponent<PowerUp>().powerUpCageLight = powerUpCell;
                         powerUpsCount++;
                     }
                     
@@ -449,19 +465,19 @@ public class LevelCreation : MonoBehaviour
         }
         else
         {
-            newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
-            newMapEntrance = new Vector2Int(2, mapData.mapSections[currentRoom].exit.y);
-            currentRoom++;
+            newMapBase = new Vector2Int(mapData.mapSections[mapData.currentRoom].basePosition.x + mapData.mapSections[mapData.currentRoom].width, mapData.mapSections[mapData.currentRoom].basePosition.y);
+            newMapEntrance = new Vector2Int(2, mapData.mapSections[mapData.currentRoom].exit.y);
+            mapData.currentRoom++;
         }
 
         Debug.Log("New map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
-        mapData.mapSections[currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[currentRoom]);
-        CreatePlatforms(mapData.mapSections[currentRoom]);
-        SpikeFloor(mapData.mapSections[currentRoom]);
-        //DecorateWalls(mapData.mapSections[currentRoom]);
-        RenderMap(mapData.mapSections[currentRoom]);
+        mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreatePlatforms(mapData.mapSections[mapData.currentRoom]);
+        SpikeFloor(mapData.mapSections[mapData.currentRoom]);
+        //DecorateWalls(mapData.mapSections[mapData.currentRoom]);
+        RenderMap(mapData.mapSections[mapData.currentRoom]);
     }
 
     private void AddTrappedSpikeRoom()
@@ -476,20 +492,20 @@ public class LevelCreation : MonoBehaviour
         }
         else
         {
-            newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
-            newMapEntrance = new Vector2Int(2, mapData.mapSections[currentRoom].exit.y);
-            currentRoom++;
+            newMapBase = new Vector2Int(mapData.mapSections[mapData.currentRoom].basePosition.x + mapData.mapSections[mapData.currentRoom].width, mapData.mapSections[mapData.currentRoom].basePosition.y);
+            newMapEntrance = new Vector2Int(2, mapData.mapSections[mapData.currentRoom].exit.y);
+            mapData.currentRoom++;
         }
 
         Debug.Log("New map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
-        mapData.mapSections[currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[currentRoom]);
-        CreatePlatforms(mapData.mapSections[currentRoom]);
-        CreateTrapFloor(mapData.mapSections[currentRoom]);
-        SpikeFloor(mapData.mapSections[currentRoom]);
-        DecorateWalls(mapData.mapSections[currentRoom]);
-        RenderMap(mapData.mapSections[currentRoom]);
+        mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreatePlatforms(mapData.mapSections[mapData.currentRoom]);
+        CreateTrapFloor(mapData.mapSections[mapData.currentRoom]);
+        SpikeFloor(mapData.mapSections[mapData.currentRoom]);
+        DecorateWalls(mapData.mapSections[mapData.currentRoom]);
+        RenderMap(mapData.mapSections[mapData.currentRoom]);
         
     }
 
@@ -505,16 +521,16 @@ public class LevelCreation : MonoBehaviour
         }
         else
         {
-            newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
-            newMapEntrance = new Vector2Int(0, mapData.mapSections[currentRoom].exit.y);
-            currentRoom++;
+            newMapBase = new Vector2Int(mapData.mapSections[mapData.currentRoom].basePosition.x + mapData.mapSections[mapData.currentRoom].width, mapData.mapSections[mapData.currentRoom].basePosition.y);
+            newMapEntrance = new Vector2Int(0, mapData.mapSections[mapData.currentRoom].exit.y);
+            mapData.currentRoom++;
         }
         
         Debug.Log("Transition map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, 2, newMapBase));
-        mapData.mapSections[currentRoom].entrance = newMapEntrance;
-        TransitionArea(mapData.mapSections[currentRoom]);
-        RenderMap(mapData.mapSections[currentRoom]);
+        mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
+        TransitionArea(mapData.mapSections[mapData.currentRoom]);
+        RenderMap(mapData.mapSections[mapData.currentRoom]);
     }
 
     private void AddStandardRoom()
@@ -529,21 +545,21 @@ public class LevelCreation : MonoBehaviour
         }
         else
         {
-            newMapBase = new Vector2Int(mapData.mapSections[currentRoom].basePosition.x + mapData.mapSections[currentRoom].width, mapData.mapSections[currentRoom].basePosition.y);
-            newMapEntrance = new Vector2Int(2, mapData.mapSections[currentRoom].exit.y);
-            currentRoom++;
+            newMapBase = new Vector2Int(mapData.mapSections[mapData.currentRoom].basePosition.x + mapData.mapSections[mapData.currentRoom].width, mapData.mapSections[mapData.currentRoom].basePosition.y);
+            newMapEntrance = new Vector2Int(2, mapData.mapSections[mapData.currentRoom].exit.y);
+            mapData.currentRoom++;
         }
  
         Debug.Log("New map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
-        mapData.mapSections[currentRoom].exit = new Vector2Int(mapData.mapSections[currentRoom].width - 3, 2);
-        mapData.mapSections[currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[currentRoom]);
-        CreateStandardRoom(mapData.mapSections[currentRoom]);
-        CreateTrapFloor(mapData.mapSections[currentRoom]);
-        DecorateGround(mapData.mapSections[currentRoom]);
-        DecorateWalls(mapData.mapSections[currentRoom]);
-        RenderMap(mapData.mapSections[currentRoom]);
+        mapData.mapSections[mapData.currentRoom].exit = new Vector2Int(mapData.mapSections[mapData.currentRoom].width - 3, 2);
+        mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreateStandardRoom(mapData.mapSections[mapData.currentRoom]);
+        CreateTrapFloor(mapData.mapSections[mapData.currentRoom]);
+        DecorateGround(mapData.mapSections[mapData.currentRoom]);
+        DecorateWalls(mapData.mapSections[mapData.currentRoom]);
+        RenderMap(mapData.mapSections[mapData.currentRoom]);
     }
 
     private void CreateStandardRoom(MapSection map)
@@ -574,13 +590,13 @@ public class LevelCreation : MonoBehaviour
     void Start()
     {
         enemiesList = Resources.LoadAll<GameObject>("Prefabs/Enemies");
+        objectPooler = ObjectPooler.Instance;
+
         glowTile1 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile1");
         glowTile2 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile2");
         
         mapData.mapSections.Clear();
-
-        //Add and generate first section to map
-        currentRoom = 0;
+        mapData.currentRoom = 0;
 
         if (width < 20)
         {
@@ -607,11 +623,5 @@ public class LevelCreation : MonoBehaviour
                 AddTrappedSpikeRoom();
             }
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

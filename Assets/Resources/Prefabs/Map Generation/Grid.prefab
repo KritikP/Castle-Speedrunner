@@ -868,7 +868,7 @@ MonoBehaviour:
   maxPlatformLength: 5
   startingPosition: {x: 0, y: 0}
   maxEnemiesPerRoom: 3
-  enemySpawnRatePerPlatform: 0.25
+  enemySpawnRatePerPlatform: 0.5
   maxCoinSetsPerRoom: 2
   coinSpawnRatePerPlatform: 0.2
   maxTrapsPerRoom: 2
@@ -2071,7 +2071,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6647152761272757290}
-  m_BodyType: 2
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -2079,11 +2079,11 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 13182aacebcb38c45a4c90a643857fda, type: 2}
+  m_Material: {fileID: 6200000, guid: cd09acf83bc1b5e4788b1b5cfaf3e982, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 7
 --- !u!66 &6647152761272757284
 CompositeCollider2D:
   m_ObjectHideFlags: 0
@@ -2373,24 +2373,24 @@ Tilemap:
     m_Data:
       e00: NaN
       e01: 0
-      e02: 7.914606e+18
+      e02: 1.0854534e-10
       e03: NaN
       e10: NaN
       e11: 0
-      e12: 8.8e-44
+      e12: 2.4e-44
       e13: NaN
-      e20: -4.8205355e+36
-      e21: 7.914597e+18
+      e20: -2.9165683e+10
+      e21: 1.0854523e-10
       e22: 0
       e23: 0
-      e30: 6.91e-43
-      e31: 8.8e-44
+      e30: 5.82e-43
+      e31: 2.4e-44
       e32: 0
       e33: 0
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 0.0000000013106884, g: 0.0000000013106884, b: 0.0000000013106884,
-      a: 0.0000000013106884}
+    m_Data: {r: 0.0000000026471199, g: 0.0000000026471199, b: 0.0000000026471199,
+      a: 0.0000000026471199}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

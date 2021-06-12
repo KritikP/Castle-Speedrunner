@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : MonoBehaviour, IPooledObject
 {
     [SerializeField] private Player_Data playerData;
+    [SerializeField] private Rigidbody2D body2d;
     private AudioManager audioManager;
 
     // Start is called before the first frame update
@@ -13,13 +14,24 @@ public class Coin : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void SetBodyType(RigidbodyType2D type)
+    {
+        body2d.bodyType = type;
+    }
+
+    public void OnObjectSpawn()
+    {
+        body2d.bodyType = RigidbodyType2D.Static;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 10)
         {
             playerData.coins++;
             audioManager.Play("Coin Pickup");
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
+
 }
