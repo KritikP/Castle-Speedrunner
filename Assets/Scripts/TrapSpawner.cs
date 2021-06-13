@@ -10,6 +10,20 @@ public class TrapSpawner : MonoBehaviour
     [SerializeField, Range(1, 100)] private float shurikenSpeed = 10f;
     [SerializeField] private Map_Data mapData;
     [SerializeField] private bool firing = true;
+    private GameObject player;
+    private ObjectPooler objectPooler;
+
+    private float time;
+
+    private void Awake()
+    {
+        player = FindObjectOfType<HeroKnight>().gameObject;
+    }
+
+    private void Start()
+    {
+        objectPooler = ObjectPooler.Instance;
+    }
 
     public void SpawnShurikenTrap(Vector3 position)
     {
@@ -20,11 +34,11 @@ public class TrapSpawner : MonoBehaviour
     {
         int trapRoom = mapData.currentRoom;
 
-        while (trapRoom == mapData.currentRoom)
+        while (player.transform.position.x < (trapRoom - 1) * mapData.mapSections[0].width)
         {
             yield return new WaitUntil(isFiring);
             yield return new WaitForSeconds(shurikenSpawnSpeed);
-            GameObject newShuriken = Instantiate(shuriken, position, Quaternion.identity);
+            GameObject newShuriken = objectPooler.SpawnFromPool("Trap_Shuriken", position, Quaternion.identity);
             newShuriken.GetComponent<Rigidbody2D>().velocity = new Vector2(0, shurikenSpeed);
         }
         

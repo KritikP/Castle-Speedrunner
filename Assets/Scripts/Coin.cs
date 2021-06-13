@@ -24,7 +24,7 @@ public class Coin : MonoBehaviour, IPooledObject
         body2d.bodyType = RigidbodyType2D.Static;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.layer == 10)
         {
@@ -33,5 +33,4 @@ public class Coin : MonoBehaviour, IPooledObject
             gameObject.SetActive(false);
         }
     }
-
 }

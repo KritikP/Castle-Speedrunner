@@ -14,22 +14,18 @@ public class ObjectPooler : MonoBehaviour
 
     public static ObjectPooler Instance;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
-    void Start()
+    private void Awake()
     {
+        Instance = this;
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
-        foreach(Pool pool in pools)
+        foreach (Pool pool in pools)
         {
             Queue<GameObject> objectPool = new Queue<GameObject>();
 
-            for(int i = 0; i < pool.size; i++)
+            for (int i = 0; i < pool.size; i++)
             {
                 GameObject obj = Instantiate(pool.itemPrefab);
                 obj.transform.SetParent(transform);
@@ -38,6 +34,11 @@ public class ObjectPooler : MonoBehaviour
             }
             poolDictionary.Add(pool.name, objectPool);
         }
+    }
+
+    void Start()
+    {
+        
     }
 
     public GameObject SpawnFromPool(string objectTag, Vector3 position, Quaternion rotation)
@@ -63,4 +64,5 @@ public class ObjectPooler : MonoBehaviour
 
         return obj;
     }
+
 }

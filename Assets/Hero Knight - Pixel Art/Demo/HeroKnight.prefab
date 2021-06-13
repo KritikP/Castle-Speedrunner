@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1210394360}
   - component: {fileID: 1210394361}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Point Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 0.9235792, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.5568628, b: 0, a: 1}
   m_Intensity: 0
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000

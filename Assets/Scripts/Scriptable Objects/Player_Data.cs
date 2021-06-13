@@ -13,7 +13,7 @@ public class Player_Data : ScriptableObject
     [SerializeField] public bool    invincible = false;
     [SerializeField] public bool    isBlocking = false;
     [SerializeField] public bool    rolling = false;
-    public bool                     canMove = true;
+    [SerializeField] public bool    canMove = true;
     [SerializeField] public float   invincibilityTime = 1f;
     [SerializeField] public int     baseAttackDamage = 20;
     [SerializeField] public int     attackDamage = 20;

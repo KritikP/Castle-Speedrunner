@@ -24,7 +24,7 @@ public class RangedShot : MonoBehaviour
     {
         if (1 << other.gameObject.layer == attackingLayerMask)
         {
-            if (other.GetComponent<IDamagable>() != null && !playerData.invincible)
+            if (other.GetComponent<IDamagable>() != null)
             {
                 other.GetComponent<IDamagable>().TakeDamage(damage);
                 animator.SetTrigger("Hit");

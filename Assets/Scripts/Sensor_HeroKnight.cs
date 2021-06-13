@@ -3,39 +3,56 @@ using System.Collections;
 
 public class Sensor_HeroKnight : MonoBehaviour {
 
-    private int m_ColCount = 0;
+    //private int ColCount = 0;
 
-    private float m_DisableTimer;
+    private float DisableTimer;
 
-    private void OnEnable()
+    private bool isColliding = false;
+    private Collider2D collider2d;
+
+    private void Start()
     {
-        m_ColCount = 0;
+        collider2d = GetComponent<Collider2D>();
     }
 
     public bool State()
     {
-        if (m_DisableTimer > 0)
+        if (DisableTimer > 0)
             return false;
-        return m_ColCount > 0;
+        return isColliding;
+        //return ColCount > 0;
     }
 
+    /*
+    private void OnEnable()
+    {
+        ColCount = 0;
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
-        m_ColCount++;
+        if(other.gameObject.layer == 11)
+        {
+            ColCount++;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        m_ColCount--;
+        if (other.gameObject.layer == 11)
+        {
+            ColCount--;
+        }
     }
+    */
 
     void Update()
     {
-        m_DisableTimer -= Time.deltaTime;
+        DisableTimer -= Time.deltaTime;
+        isColliding = collider2d.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }
 
     public void Disable(float duration)
     {
-        m_DisableTimer = duration;
+        DisableTimer = duration;
     }
 }

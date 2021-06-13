@@ -12,6 +12,7 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private Tilemap backgroundDecorationTilemap;
     [SerializeField] private Map_Data mapData;
     [SerializeField] private TrapSpawner trapSpawner;
+    [SerializeField] private PowerUps powerUps;
 
     private List<MapSection> maps;
     private ObjectPooler objectPooler;
@@ -281,21 +282,12 @@ public class LevelCreation : MonoBehaviour
                     if(map.AddObject(col + platformLength / 2, row + 2, map, map.decorationsArray, obj) == 0)
                     {
                         GameObject powerUpCell = Instantiate(obj.glowObject, new Vector3(map.basePosition.x + col + platformLength / 2 + obj.glowPosition.x, map.basePosition.y + row + 2 + obj.glowPosition.y), Quaternion.identity);
-                        int power = rand.Next(0, 3);
                         GameObject powerUp;
-                        if(power == 0)
-                        {
-                            powerUp = objectPooler.SpawnFromPool("PowerUp_Invincibility", powerUpCell.transform.position, Quaternion.identity);
-                        }
-                        else if(power == 1)
-                        {
-                            powerUp = objectPooler.SpawnFromPool("PowerUp_Invincibility", powerUpCell.transform.position, Quaternion.identity);
-                        }
-                        else
-                        {
-                            powerUp = objectPooler.SpawnFromPool("PowerUp_Invincibility", powerUpCell.transform.position, Quaternion.identity);
-                        }
+                        int power = rand.Next(0, powerUps.powerUpItems.Length);
+                        powerUp = objectPooler.SpawnFromPool("PowerUp", powerUpCell.transform.position, Quaternion.identity);
                         powerUp.GetComponent<PowerUp>().powerUpCageLight = powerUpCell;
+                        powerUp.GetComponent<PowerUp>().SetPowerUpType((PowerUpType) power);
+
                         powerUpsCount++;
                     }
                     

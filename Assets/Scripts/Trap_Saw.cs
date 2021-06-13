@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trap_Saw : MonoBehaviour
+public class Trap_Saw : MonoBehaviour, IPooledObject
 {
     [SerializeField] private LayerMask playerMask;
     [SerializeField] private int damage = 10;
-    [SerializeField] private float spinSpeed = 1f;
 
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(0, 0, -spinSpeed);
         if (transform.position.y > 18)
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -22,5 +20,10 @@ public class Trap_Saw : MonoBehaviour
         {
             other.GetComponent<Player_Health>().TakeDamageRolling(damage);
         }
+    }
+
+    public void OnObjectSpawn()
+    {
+
     }
 }

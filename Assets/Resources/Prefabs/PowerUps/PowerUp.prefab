@@ -10,12 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8979957456083310121}
   - component: {fileID: 8979957456083310122}
+  - component: {fileID: 3975540172536173096}
   - component: {fileID: 8979957456083310120}
   - component: {fileID: 8979957456083310119}
   - component: {fileID: 1803400479}
   - component: {fileID: 6246582869740092730}
   m_Layer: 13
-  m_Name: PowerUp_Invincibility
+  m_Name: PowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,6 +86,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &3975540172536173096
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8979957456083310123}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.2
 --- !u!58 &8979957456083310120
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -100,7 +117,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.16
+  m_Radius: 0.15
 --- !u!114 &8979957456083310119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,24 +131,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: e13674d5e6a82654984b359a45fe38c5, type: 2}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  powerUp:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8979957456083310119}
-        m_MethodName: PowerUpInvincible
-        m_Mode: 4
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 5
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  sprite: {fileID: 8979957456083310122}
+  powerUps: {fileID: 11400000, guid: c157078e576f5294d905ed27de12bd08, type: 2}
+  type: 1
+  powerUpCageLight: {fileID: 0}
 --- !u!114 &1803400479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +187,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.0001
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
