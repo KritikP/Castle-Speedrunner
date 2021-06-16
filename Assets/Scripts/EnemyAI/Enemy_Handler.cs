@@ -12,7 +12,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected SpriteRenderer spriteData;
     protected Rigidbody2D body2d;
     protected Collider2D[] colliders;
-    private GameObject[] powerUpsList;
+    protected GameObject[] powerUpsList;
 
     protected ContactFilter2D playerFilter;
     protected float fade = 1f;
@@ -31,18 +31,19 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     [SerializeField] protected CollisionSensor rightWalkSensor;
     [SerializeField] protected CollisionSensor leftWallSensor;
     [SerializeField] protected CollisionSensor rightWallSensor;
-    [SerializeField] protected CollisionSensor attackHitbox;
+    [SerializeField] protected AttackSensor attackHitbox;
     [SerializeField] protected Enemy_Data enemyData;
     [SerializeField] protected Player_Data playerData;
-    [SerializeField] private EnemyHealthBar healthBar;
-    [SerializeField] private Material flashMat;
+    [SerializeField] protected EnemyHealthBar healthBar;
+    [SerializeField] protected Material flashMat;
+    [SerializeField] protected GameObject hitboxes;
 
     protected LayerMask playerMask;
     protected LayerMask groundMask;
     protected System.Random rand;
 
-    private int room;
-    private float flashTime = 0.05f;
+    protected int room;
+    protected float flashTime = 0.05f;
 
     public void TakeDamage(int damage)
     {
@@ -50,21 +51,6 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         healthBar.SetHealth(health);
         animator.SetTrigger("Hurt");
         StartCoroutine(HitFlash());
-    }
-    
-    private IEnumerator HitFlash()
-    {
-        Material mat = spriteData.material;
-        spriteData.material = flashMat;
-        yield return new WaitForSeconds(flashTime);
-        spriteData.material = mat;
-    }
-
-    private IEnumerator AttackPause()
-    {
-        animator.speed = 0;
-        yield return new WaitForSeconds(pauseAttackTime);
-        animator.speed = 1;
     }
 
     protected void CheckForDeath()
@@ -109,42 +95,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         }
     }
 
-    public virtual void Attack()
-    {
-        if (!dead)
-        {
-            List<Collider2D> hitColliders = new List<Collider2D>();
-            attackHitbox.GetComponent<Collider2D>().OverlapCollider(playerFilter, hitColliders);
-
-            bool didHit = false;
-            foreach (Collider2D c in hitColliders)
-            {
-                if (c.GetComponent<IDamagable>() != null && !didHit)
-                {
-                    c.GetComponent<IDamagable>().TakeDamage(attackDamage);
-                    didHit = true;
-                }
-            }
-            hitColliders.Clear();
-        }
-    }
-
-    public void StartMoving()
-    {
-        canMove = true;
-    }
-
-    public void StopMoving()
-    {
-        canMove = false;
-    }
-
-    private void ResetAttackState()
-    {
-        attackHitbox.GetComponent<AttackSensor>().attacking = false;
-    }
-
-    protected void InitEnemy()
+    protected virtual void InitEnemy()
     {
         objectPooler = ObjectPooler.Instance;
         rand = new System.Random();
@@ -185,23 +136,8 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     {
         if (canMove && !dead)
         {
-            if (leftWalkSensor.isCollision() && !leftWallSensor.isCollision())
-            {
-                canWalkLeft = true;
-            }
-            else
-            {
-                canWalkLeft = false;
-            }
-
-            if (rightWalkSensor.isCollision() && !rightWallSensor.isCollision())
-            {
-                canWalkRight = true;
-            }
-            else
-            {
-                canWalkRight = false;
-            }
+            canWalkLeft = leftWalkSensor.isCollision() && !leftWallSensor.isCollision();
+            canWalkRight = rightWalkSensor.isCollision() && !rightWallSensor.isCollision();
 
             if (!canWalkLeft && !canWalkRight)
             {
@@ -234,11 +170,11 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
             if (!spriteData.flipX)
             {
-                attackHitbox.gameObject.GetComponent<Collider2D>().transform.eulerAngles = new Vector3(0, 0, 0);
+                hitboxes.transform.eulerAngles = new Vector3(0, 0, 0);
             }
             else
             {
-                attackHitbox.gameObject.GetComponent<Collider2D>().transform.eulerAngles = new Vector3(0, 180, 0);
+                hitboxes.transform.eulerAngles = new Vector3(0, 180, 0);
             }
         }
         else
@@ -257,7 +193,42 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
     }
 
-    private IEnumerator PauseMovementRoutine()
+    private void AE_ResetAttackState()
+    {
+        attackHitbox.GetComponent<AttackSensor>().attacking = false;
+    }
+
+    public void AE_StartMoving()
+    {
+        canMove = true;
+    }
+
+    public void AE_StopMoving()
+    {
+        canMove = false;
+    }
+
+    public virtual void AE_Attack()
+    {
+        if (!dead)
+        {
+            List<Collider2D> hitColliders = new List<Collider2D>();
+            attackHitbox.GetComponent<Collider2D>().OverlapCollider(playerFilter, hitColliders);
+
+            bool didHit = false;
+            foreach (Collider2D c in hitColliders)
+            {
+                if (c.GetComponent<IDamagable>() != null && !didHit)
+                {
+                    c.GetComponent<IDamagable>().TakeDamage(attackDamage);
+                    didHit = true;
+                }
+            }
+            hitColliders.Clear();
+        }
+    }
+
+    protected IEnumerator PauseMovementRoutine()
     {
         canMove = false;
         animator.SetBool("Walking", false);
@@ -266,4 +237,18 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         walkDirection = walkDirection * -1;
     }
 
+    private IEnumerator HitFlash()
+    {
+        Material mat = spriteData.material;
+        spriteData.material = flashMat;
+        yield return new WaitForSeconds(flashTime);
+        spriteData.material = mat;
+    }
+
+    private IEnumerator AttackPause()
+    {
+        animator.speed = 0;
+        yield return new WaitForSeconds(pauseAttackTime);
+        animator.speed = 1;
+    }
 }

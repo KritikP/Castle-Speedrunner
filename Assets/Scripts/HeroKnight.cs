@@ -159,7 +159,7 @@ public class HeroKnight : MonoBehaviour {
 
                 List<Collider2D> hitColliders = new List<Collider2D>();
                 attackHitbox.GetComponent<Collider2D>().OverlapCollider(contactFilter2d, hitColliders);
-
+                
                 foreach (Collider2D enemy in hitColliders)
                 {
                     if (enemy.GetComponent<IDamagable>() != null)
@@ -167,6 +167,12 @@ public class HeroKnight : MonoBehaviour {
                         //Debug.Log("We hit enemy: " + enemy.name);
                         audioManager.Play("Hit");
                         enemy.GetComponent<IDamagable>().TakeDamage(player.attackDamage);
+                    }
+                    else if (enemy.GetComponentInParent<IDamagable>() != null)
+                    {
+                        //Debug.Log("We hit enemy: " + enemy.name);
+                        audioManager.Play("Hit");
+                        enemy.GetComponentInParent<IDamagable>().TakeDamage(player.attackDamage);
                     }
                 }
 

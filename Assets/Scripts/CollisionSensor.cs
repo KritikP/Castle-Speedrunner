@@ -22,7 +22,6 @@ public class CollisionSensor : MonoBehaviour
         if (1 << other.gameObject.layer == layerMask)
         {
             collisionCount++;
-            //Debug.Log("Collision enter");
         }
     }
 
@@ -31,7 +30,6 @@ public class CollisionSensor : MonoBehaviour
         if (1 << other.gameObject.layer == layerMask)
         {
             collisionCount--;
-            //Debug.Log("Collision exit");
         }
     }
 }

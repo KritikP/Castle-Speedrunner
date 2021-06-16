@@ -25,16 +25,14 @@ public class TrapSpawner : MonoBehaviour
         objectPooler = ObjectPooler.Instance;
     }
 
-    public void SpawnShurikenTrap(Vector3 position)
+    public void SpawnShurikenTrap(Vector3 position, int room)
     {
-        StartCoroutine(SpawnShuriken(position));
+        StartCoroutine(SpawnShuriken(position, room));
     }
 
-    private IEnumerator SpawnShuriken(Vector3 position)
+    private IEnumerator SpawnShuriken(Vector3 position, int room)
     {
-        int trapRoom = mapData.currentRoom;
-
-        while (player.transform.position.x < (trapRoom - 1) * mapData.mapSections[0].width)
+        while (player.transform.position.x < mapData.mapSections[room].basePosition.x + mapData.mapSections[room].width)
         {
             yield return new WaitUntil(isFiring);
             yield return new WaitForSeconds(shurikenSpawnSpeed);

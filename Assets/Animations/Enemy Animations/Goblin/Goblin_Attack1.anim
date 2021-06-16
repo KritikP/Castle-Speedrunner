@@ -103,21 +103,21 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.5
-    functionName: Attack
+    functionName: AE_Attack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 10
     messageOptions: 0
   - time: 0.5833333
-    functionName: ResetAttackState
+    functionName: AE_StartMoving
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.5833333
-    functionName: StartMoving
+    functionName: AE_ResetAttackState
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

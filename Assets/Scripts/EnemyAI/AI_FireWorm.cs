@@ -7,7 +7,7 @@ public class AI_FireWorm : Enemy_Handler
     [SerializeField] private float fireballSpeed = 5f;
     [SerializeField] private Transform fireballSpawnPosition;
 
-    public override void Attack()
+    public override void AE_Attack()
     {
         GameObject fireball = Instantiate(Resources.Load<GameObject>("Prefabs/Ranged Attacks/Fireball"), fireballSpawnPosition.position, Quaternion.identity);
         fireball.GetComponent<RangedShot>().damage = attackDamage;
@@ -29,11 +29,5 @@ public class AI_FireWorm : Enemy_Handler
     {
         Movement();
         CheckForDeath();
-
-        //Set fireball spawn position
-        if (!spriteData.flipX && fireballSpawnPosition.localPosition.x < 0 || spriteData.flipX && fireballSpawnPosition.localPosition.x > 0)
-        {
-            fireballSpawnPosition.localPosition = new Vector3(-fireballSpawnPosition.localPosition.x, fireballSpawnPosition.localPosition.y, fireballSpawnPosition.localPosition.z);
-        }
     }
 }

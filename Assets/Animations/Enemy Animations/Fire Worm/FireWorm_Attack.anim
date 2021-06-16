@@ -128,21 +128,21 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.9166667
-    functionName: Attack
+    functionName: AE_Attack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.25
-    functionName: StartMoving
+    functionName: AE_StartMoving
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1.25
-    functionName: ResetAttackState
+    functionName: AE_ResetAttackState
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
