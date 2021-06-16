@@ -33,12 +33,30 @@ public class LevelCreation : MonoBehaviour
     private int entrancePlatformLength = 4;
     private System.Random rand = new System.Random();
 
-    private int[] background1a = {357, 331, 300, 262, 221, 176, 135};
-    private int[] background1b = {230, 185, 144};
+    private int[] backgroundRed1 = {357, 331, 300, 262, 221, 176, 135};
+    private int[] backgroundRed2 = {230, 185, 144};
     private int[] background2 = {956, 931, 903, 881, 844, 786, 745};
-    private int[] background3 = {1506, 1481, 1453, 1431, 1394, 1336, 1295};
-    private int[] spikeRoomLeft = { 345, 384, 408, 438, 451, 482, 502, 534 };
-    private int[] spikeRoomRight = { 347, 395, 414, 440, 453, 484, 519, 551 };
+    private int[] backgroundBlack1 = {1506, 1481, 1453, 1431, 1394, 1336, 1295};
+
+    private int[] baseRoomLeftGray = { 345, 384, 408, 438, 451, 482, 502, 534 };
+    private int[] baseRoomRightGray = { 347, 395, 414, 440, 453, 484, 519, 551 };
+    private int[] baseRoomTopGray = { 11, 59 };
+    private int[] baseRoomBottomGray = { 579, 33 };
+    private int[] baseRoomTopLeftCornerGray = { 67, 10, 12, 246};
+    private int[] baseRoomTopRightCornerGray = { 21, 82, 249, 20};
+    private int[] baseRoomBottomLeftCornerGray = { 576, 577, 609, 610};
+    private int[] baseRoomBottomRightCornerGray = { 594, 595, 627, 628};
+    private int[] baseRoomEntranceGray = { 290, 593};
+
+    private int[] baseRoomLeftRed = { 973, 984, 1018, 1038, 1061, 1075, 1095, 1117 };
+    private int[] baseRoomRightRed = { 975, 995, 1024, 1040, 1063, 1077, 1112, 1134};
+    private int[] baseRoomTopRed = { 677, 44 };
+    private int[] baseRoomBottomRed = { 1152, 28 };
+    private int[] baseRoomTopLeftCornerRed = { 718, 676, 151, 891 };
+    private int[] baseRoomTopRightCornerRed = { 687, 733, 894, 823 };
+    private int[] baseRoomBottomLeftCornerRed = { 1149, 1150, 1177, 1178 };
+    private int[] baseRoomBottomRightCornerRed = { 1167, 1168, 1195, 1196 };
+    private int[] baseRoomEntranceRed = { 921, 1166 };
 
     private GameObject glowTile1;
     private GameObject glowTile2;
@@ -51,11 +69,20 @@ public class LevelCreation : MonoBehaviour
     [SerializeField, Range(0, 1)] private float   powerUpSpawnChance = 0.1f;
     [SerializeField] private int                  maxPowerUpsPerRoom = 1;
 
-    private void GenerateBackground(MapSection map)
+    private void GenerateBackground(MapSection map, Color color)
     {
-        for(int i = 0; i < map.width * map.height; i++)
+        int[] background;
+        if (color == Color.red)
         {
-            map.backgroundArray[i].tileNum = background1a[rand.Next(0, background1a.Length)] + rand.Next(0, 7);
+            background = backgroundRed1;
+        }
+        else{
+            background = backgroundBlack1;
+        }
+
+        for (int i = 0; i < map.width * map.height; i++)
+        {
+            map.backgroundArray[i].tileNum = background[rand.Next(0, background.Length)] + rand.Next(0, 7);
         }
     }
 
@@ -68,74 +95,95 @@ public class LevelCreation : MonoBehaviour
         }
     }
 
-    private void CreateRoomBase(MapSection map)
+    private void CreateRoomBase(MapSection map, Color color)
     {
         int tileNum = 0;
-        
+        int[] baseRoomLeft;
+        int[] baseRoomRight;
+        int[] baseRoomTop;
+        int[] baseRoomBottom;
+        int[] baseRoomTopLeftCorner;
+        int[] baseRoomTopRightCorner;
+        int[] baseRoomBottomLeftCorner;
+        int[] baseRoomBottomRightCorner;
+        int[] baseRoomEntrance;
+        if (color == Color.gray)
+        {
+            baseRoomLeft = baseRoomLeftGray;
+            baseRoomRight = baseRoomRightGray;
+            baseRoomTop = baseRoomTopGray;
+            baseRoomBottom = baseRoomBottomGray;
+            baseRoomTopLeftCorner = baseRoomTopLeftCornerGray;
+            baseRoomTopRightCorner = baseRoomTopRightCornerGray;
+            baseRoomBottomLeftCorner = baseRoomBottomLeftCornerGray;
+            baseRoomBottomRightCorner = baseRoomBottomRightCornerGray;
+            baseRoomEntrance = baseRoomEntranceGray;
+            GenerateBackground(map, Color.red);
+        }
+        else
+        {
+            baseRoomLeft = baseRoomLeftRed;
+            baseRoomRight = baseRoomRightRed;
+            baseRoomTop = baseRoomTopRed;
+            baseRoomBottom = baseRoomBottomRed;
+            baseRoomTopLeftCorner = baseRoomTopLeftCornerRed;
+            baseRoomTopRightCorner = baseRoomTopRightCornerRed;
+            baseRoomBottomLeftCorner = baseRoomBottomLeftCornerRed;
+            baseRoomBottomRightCorner = baseRoomBottomRightCornerRed;
+            baseRoomEntrance = baseRoomEntranceRed;
+            GenerateBackground(map, Color.black);
+        }
+
         map.yTopBorder = map.height - 2;
         map.yBottomBorder = 1;
         map.xLeftBorder = 1;
         map.xRightBorder = map.width - 2;
 
-        //Top tiles
-        //Top left corner
-        map.SetTile(0, height - 1, 67, map.mapArray);
-        map.SetTile(1, height - 1, 10, map.mapArray);
-        map.SetTile(0, height - 2, 12, map.mapArray);
-        map.SetTile(1, height - 2, 246, map.mapArray);
-
-        tileNum = 11;
-        for (int c = 2; c < width - 2; c++)
+        for(int r = 0; r < 2; r++)
         {
-            map.SetTile(c, height - 1, tileNum, map.mapArray);
-            map.SetTile(c, height - 2, tileNum + 59, map.mapArray);
-            tileNum++;
-            if (tileNum > 20)
-                tileNum = 10;
+            for(int c = 0; c < 2; c++)
+            {
+                map.SetTile(c, height - r - 1, baseRoomTopLeftCorner[tileNum], map.mapArray);
+                map.SetTile(map.width - 2 + c, height - r - 1, baseRoomTopRightCorner[tileNum], map.mapArray);
+                map.SetTile(c, 1 - r, baseRoomBottomLeftCorner[tileNum], map.mapArray);
+                map.SetTile(map.width - 2 + c, 1 - r, baseRoomBottomRightCorner[tileNum], map.mapArray);
+                tileNum++;
+            }
         }
 
-        //Top right corner
-        map.SetTile(width - 1, height - 1, 82, map.mapArray);
-        map.SetTile(width - 2, height - 1, 21, map.mapArray);
-        map.SetTile(width - 1, height - 2, 20, map.mapArray);
-        map.SetTile(width - 2, height - 2, 249, map.mapArray);
+        tileNum = 0;
+        for (int c = 2; c < width - 2; c++)
+        {
+            map.SetTile(c, height - 1, baseRoomTop[0] + tileNum, map.mapArray);
+            map.SetTile(c, height - 2, baseRoomTop[0] + baseRoomTop[1] + tileNum, map.mapArray);
+            tileNum++;
+            if (tileNum > 9)
+                tileNum = 0;
+        }
 
         tileNum = 0;
         for (int r = height - 3; r > 1; r--)
         {
-            map.SetTile(0, r, spikeRoomLeft[tileNum], map.mapArray);
-            map.SetTile(1, r, spikeRoomLeft[tileNum] + 1, map.mapArray);
-            map.SetTile(width - 2, r, spikeRoomRight[tileNum], map.mapArray);
-            map.SetTile(width - 1, r, spikeRoomRight[tileNum] + 1, map.mapArray);
+            map.SetTile(0, r, baseRoomLeft[tileNum], map.mapArray);
+            map.SetTile(1, r, baseRoomLeft[tileNum] + 1, map.mapArray);
+            map.SetTile(width - 2, r, baseRoomRight[tileNum], map.mapArray);
+            map.SetTile(width - 1, r, baseRoomRight[tileNum] + 1, map.mapArray);
             tileNum++;
             if (tileNum > 7)
                 tileNum = 0;
         }
 
-        tileNum = 579;
+        tileNum = 0;
         for (int c = 2; c < width - 2; c++)
         {
-            map.SetTile(c, 1, tileNum, map.mapArray);
-            map.SetTile(c, 0, tileNum + 33, map.mapArray);
+            map.SetTile(c, 1, baseRoomBottom[0] + tileNum, map.mapArray);
+            map.SetTile(c, 0, baseRoomBottom[0] + baseRoomBottom[1] + tileNum, map.mapArray);
             tileNum++;
-            if (tileNum > 592)
-                tileNum = 579;
+            if (tileNum > 13)
+                tileNum = 0;
         }
 
-        //Bottom Left Corner
-        map.SetTile(0, 1, 576, map.mapArray);
-        map.SetTile(0, 0, 609, map.mapArray);
-        map.SetTile(1, 1, 577, map.mapArray);
-        map.SetTile(1, 0, 610, map.mapArray);
-
-        //Bottom Right Corner
-        map.SetTile(width - 2, 1, 594, map.mapArray);
-        map.SetTile(width - 1, 1, 595, map.mapArray);
-        map.SetTile(width - 2, 0, 627, map.mapArray);
-        map.SetTile(width - 1, 0, 628, map.mapArray);
-
         //Chisel the entrance area
-        
         if (mapData.currentRoom != 0)
         {
             for(int x = 1; x >= 0; x--)
@@ -146,16 +194,14 @@ public class LevelCreation : MonoBehaviour
                     map.SetTile(x, y, -1, map.mapArray);
                 }
             }
-            map.SetTile(1, map.entrance.y, 593, map.mapArray);
-            map.SetTile(1, map.entrance.y + 5, 290, map.mapArray);
+            map.SetTile(1, map.entrance.y, baseRoomEntrance[1], map.mapArray);
+            map.SetTile(1, map.entrance.y + 5, baseRoomEntrance[0], map.mapArray);
             map.SetTile(0, map.entrance.y, 1092, map.mapArray);
             map.SetTile(0, map.entrance.y + 5, 1092, map.mapArray);
 
             Instantiate(glowTile1, new Vector3(map.basePosition.x + 0.5f, map.entrance.y + 0.5f, 0), Quaternion.identity);
             Instantiate(glowTile1, new Vector3(map.basePosition.x + 0.5f, map.entrance.y + 0.5f + 5, 0), Quaternion.identity);
         }
-
-        GenerateBackground(map);
     }
 
     private void CreateStandardRoom(MapSection map, bool spawnEnemies)
@@ -363,7 +409,7 @@ public class LevelCreation : MonoBehaviour
 
     private void TransitionArea(MapSection map)
     {
-        GenerateBackground(map);
+        GenerateBackground(map, Color.red);
         int glowTile = 1090;
         int brickTiles = 612;
         int blackTile = 288;
@@ -443,7 +489,7 @@ public class LevelCreation : MonoBehaviour
         //Debug.Log("New map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
         mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom], Color.gray);
         CreatePlatforms(mapData.mapSections[mapData.currentRoom]);
         SpikeFloor(mapData.mapSections[mapData.currentRoom]);
         //DecorateWalls(mapData.mapSections[mapData.currentRoom]);
@@ -470,7 +516,7 @@ public class LevelCreation : MonoBehaviour
         //Debug.Log("New map section with base position: " + newMapBase);
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
         mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom], Color.gray);
         CreatePlatforms(mapData.mapSections[mapData.currentRoom]);
         CreateTrapFloor(mapData.mapSections[mapData.currentRoom]);
         SpikeFloor(mapData.mapSections[mapData.currentRoom]);
@@ -524,7 +570,7 @@ public class LevelCreation : MonoBehaviour
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
         mapData.mapSections[mapData.currentRoom].exit = new Vector2Int(mapData.mapSections[mapData.currentRoom].width - 3, 2);
         mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom], Color.gray);
         CreateStandardRoom(mapData.mapSections[mapData.currentRoom], true);
         CreateTrapFloor(mapData.mapSections[mapData.currentRoom]);
         DecorateGround(mapData.mapSections[mapData.currentRoom]);
@@ -558,7 +604,7 @@ public class LevelCreation : MonoBehaviour
         mapData.mapSections.Add(new MapSection(height, width, newMapBase));
         mapData.mapSections[mapData.currentRoom].exit = new Vector2Int(mapData.mapSections[mapData.currentRoom].width - 3, 2);
         mapData.mapSections[mapData.currentRoom].entrance = newMapEntrance;
-        CreateRoomBase(mapData.mapSections[mapData.currentRoom]);
+        CreateRoomBase(mapData.mapSections[mapData.currentRoom], Color.red);
         CreateTrapFloor(mapData.mapSections[mapData.currentRoom]);
         CreateBossRoom(mapData.mapSections[mapData.currentRoom]);
         DecorateWalls(mapData.mapSections[mapData.currentRoom]);

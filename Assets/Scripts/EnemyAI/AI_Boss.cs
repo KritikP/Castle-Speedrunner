@@ -177,10 +177,12 @@ public class AI_Boss : Enemy_Handler
             }
             else if (canWalkLeft && playerDirection == -1)
             {
+                animator.SetBool("Walking", true);
                 walkDirection = -1;
             }
             else if(canWalkRight && playerDirection == 1)
             {
+                animator.SetBool("Walking", true);
                 walkDirection = 1;
             }
             else

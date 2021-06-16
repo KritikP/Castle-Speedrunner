@@ -109,7 +109,8 @@ public class Player_Health : MonoBehaviour, IDamagable
 
     public void PowerUpInvincible(float time)
     {
-        //StopCoroutine(InvincibilityFrames(playerData.invincibilityTime));
+        StopCoroutine(InvincibilityFrames(playerData.invincibilityTime));
+        spriteData.forceRenderingOff = false;
         InvinciblePowerUpActive = true;
         playerData.invincible = true;
         StartCoroutine(PowerUpInvincibleRoutine(time));

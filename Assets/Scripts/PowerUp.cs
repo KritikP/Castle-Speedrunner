@@ -77,7 +77,7 @@ public class PowerUp : MonoBehaviour, IPooledObject
         else if (waitingForPlayer)
         {
             distanceFromPlayer = gameObject.transform.position.x - playerHealth.gameObject.transform.position.x;
-            if (distanceFromPlayer < 20f)
+            if (distanceFromPlayer < 10f)
             {
                 powerUpCageLight.GetComponent<Light2D>().intensity = 0f;
                 spriteData.enabled = true;

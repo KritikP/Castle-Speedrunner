@@ -17,9 +17,9 @@ public class PowerUps : ScriptableObject
     public PowerUpItem[] powerUpItems;
 }
 
-public enum PowerUpType
+public enum PowerUpType : int
 {
-    Attack,
-    Invincibility,
-    Speed
+    Invincibility = 0,
+    Attack = 1,
+    Speed = 2
 }
