@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -341,7 +341,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7783308, y: 1}
+    m_SensorSize: {x: 1.7766854, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -846,6 +846,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9043920546160527475, guid: a4b4a6d32bcb19248a754d6602ffc7e4,
+        type: 3}
+      propertyPath: mapData
+      value: 
+      objectReference: {fileID: 11400000, guid: c9afdc969ba719e4eb2191f4a81e1782,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4b4a6d32bcb19248a754d6602ffc7e4, type: 3}
 --- !u!1001 &937865875
@@ -1961,7 +1967,7 @@ PrefabInstance:
     - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
         type: 3}
       propertyPath: pools.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
         type: 3}
@@ -1976,7 +1982,7 @@ PrefabInstance:
     - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
         type: 3}
       propertyPath: pools.Array.data[3].size
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
         type: 3}
@@ -1994,6 +2000,65 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6410942657261369762, guid: bbd12437080e4174cbabc02869ec3336,
         type: 3}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[3].name
+      value: Trap_Shuriken
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[3].itemPrefab
+      value: 
+      objectReference: {fileID: 6410942657261369762, guid: bbd12437080e4174cbabc02869ec3336,
+        type: 3}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[4].name
+      value: Trap_Shuriken
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[4].itemPrefab
+      value: 
+      objectReference: {fileID: 6410942657261369762, guid: bbd12437080e4174cbabc02869ec3336,
+        type: 3}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[4].size
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[5].name
+      value: Trap_Shuriken
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[5].itemPrefab
+      value: 
+      objectReference: {fileID: 6410942657261369762, guid: bbd12437080e4174cbabc02869ec3336,
+        type: 3}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[5].size
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[6].name
+      value: Trap_Shuriken
+      objectReference: {fileID: 0}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[6].itemPrefab
+      value: 
+      objectReference: {fileID: 6410942657261369762, guid: bbd12437080e4174cbabc02869ec3336,
+        type: 3}
+    - target: {fileID: 8188604842291619244, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
+        type: 3}
+      propertyPath: pools.Array.data[6].size
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 8188604842291619245, guid: 5c46a91cdcc76df4f9ff9c63d3366329,
         type: 3}
       propertyPath: m_LocalPosition.x

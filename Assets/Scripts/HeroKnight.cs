@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 public class HeroKnight : MonoBehaviour {
 
     [SerializeField] private Player_Data player;
+    [SerializeField] private Map_Data mapData;
+
     [SerializeField] bool       noBlood = false;
     [SerializeField] GameObject slideDust;
     [SerializeField] GameObject attackHitbox;
@@ -76,6 +78,11 @@ public class HeroKnight : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
+        if(transform.position.x > mapData.mapSections[player.currentRoom].basePosition.x + mapData.mapSections[player.currentRoom].width + 2)
+        {
+            player.currentRoom += 2;
+        }
+
         // Increase timer that controls attack combo
         timeSinceAttack += Time.deltaTime;
         timeSinceRoll += Time.deltaTime;

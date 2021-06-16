@@ -24,6 +24,7 @@ public class Player_Data : ScriptableObject
     [SerializeField] public float   fallMultiplier = 1f;
     [SerializeField] public float   variableJumpMultiplier = 2f;
     [SerializeField] public LayerMask playerLayer;
+    [SerializeField] public int     currentRoom = 0;
     public bool                     isDead = false;
 
     public int                      coins = 0;
@@ -33,6 +34,7 @@ public class Player_Data : ScriptableObject
 
     public void Init()
     {
+        currentRoom = 0;
         attackDamage = baseAttackDamage + 5 * attackUpgrade.level;
 
         maxHealth = 100 + 25 * armorUpgrade.level;
