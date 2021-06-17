@@ -60,6 +60,14 @@ public class AudioManager : MonoBehaviour
         s.source.Stop();
     }
 
+    public void StopAll()
+    {
+        foreach(Sound s in sounds)
+        {
+            s.source.Stop();
+        }
+    }
+
     public void PlayIntroAndLoop(string intro, string loop)
     {
         Sound i = Array.Find(sounds, item => item.name == intro);

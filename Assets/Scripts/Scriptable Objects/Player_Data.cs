@@ -41,7 +41,7 @@ public class Player_Data : ScriptableObject
         health = maxHealth;
 
         speed = baseSpeed;
-
+        stamina = maxStamina;
         isDead = false;
         invincible = false;
         canMove = true;

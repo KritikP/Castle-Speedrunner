@@ -14,7 +14,9 @@ public class SceneLoader : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         if(SceneManager.GetActiveScene().buildIndex == 0)
         {
+            audioManager.StopAll();
             audioManager.Play("Menu Music");
+            //audioManager.Stop("Level Music");
         }
     }
 
