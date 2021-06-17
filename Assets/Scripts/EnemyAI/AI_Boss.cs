@@ -8,12 +8,51 @@ public class AI_Boss : Enemy_Handler
     [SerializeField] private Collider2D[] hitboxesColliders;
     [SerializeField] private Collider2D bodyCollider;
     private HeroKnight player;
+    private bool battleBegun = false;
 
     protected override void InitEnemy()
     {
         base.InitEnemy();
         player = FindObjectOfType<HeroKnight>();
         hitboxesColliders = hitboxes.GetComponentsInChildren<Collider2D>();
+    }
+
+    protected override void CheckForDeath()
+    {
+        if (health <= 0)
+        {
+            if (!dead)
+            {
+                animator.SetTrigger("Death");
+                animator.SetBool("isDead", true);
+                StopCoroutine(PauseMovementRoutine());
+                dead = true;
+                gameObject.layer = 9;   //Dead enemies layer
+
+                for (int i = 0; i < droppedCoins; i++)
+                {
+                    GameObject spawnedCoin = objectPooler.SpawnFromPool("Coin", transform.position, Quaternion.identity);
+                    if (spawnedCoin != null)
+                    {
+                        spawnedCoin.GetComponent<Coin>().SetBodyType(RigidbodyType2D.Dynamic);
+                        spawnedCoin.GetComponent<Rigidbody2D>().velocity = new Vector2(rand.Next(-20, 20) * 0.2f, rand.Next(0, 20) * 0.3f);
+                    }
+                }
+
+            }
+
+            fade = fade - Time.deltaTime * 0.3f;
+            Color c = spriteData.color;
+            c.a = fade;
+            spriteData.color = c;
+            if (fade <= 0f)
+            {
+                Destroy(gameObject);
+                FindObjectOfType<GameUIManager>().Victory();
+                FindObjectOfType<HeroKnight>().animator.SetBool("DEBUG_canMove", false);
+                playerData.invincible = true;
+            }
+        }
     }
 
     // Start is called before the first frame update
@@ -28,6 +67,14 @@ public class AI_Boss : Enemy_Handler
         if (!animator.GetBool("DEBUG_canMove"))
         {
             canMove = false;
+        }
+        if(playerData.currentRoom >= 20 && !battleBegun)
+        {
+            battleBegun = true;
+            canMove = false;
+            animator.SetTrigger("Taunt");
+            audioManager.Stop("Level Music");
+            audioManager.Play("Boss Music");
         }
         Movement();
         CheckForDeath();
@@ -147,7 +194,7 @@ public class AI_Boss : Enemy_Handler
 
     protected override void Movement()
     {
-        if (canMove && !dead)
+        if (canMove && !dead && battleBegun)
         {
             canWalkLeft = leftWalkSensor.isCollision() && !leftWallSensor.isCollision();
             canWalkRight = rightWalkSensor.isCollision() && !rightWallSensor.isCollision();

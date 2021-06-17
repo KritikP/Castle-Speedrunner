@@ -156,7 +156,7 @@ public class Player_Health : MonoBehaviour, IDamagable
 
     private IEnumerator playerGlowRoutine(float time)
     {
-        playerGlowEffect.intensity = 4f;
+        playerGlowEffect.intensity = 5f;
         playerGlowEffect.pointLightInnerAngle = 360f;
         playerGlowEffect.pointLightOuterAngle = 360f;
         float currentTime = 0;

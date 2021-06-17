@@ -7,6 +7,16 @@ public class SceneLoader : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private float transitionTime = 1f;
+    private AudioManager audioManager;
+
+    private void Start()
+    {
+        audioManager = FindObjectOfType<AudioManager>();
+        if(SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            audioManager.Play("Menu Music");
+        }
+    }
 
     public void LoadLevel()
     {

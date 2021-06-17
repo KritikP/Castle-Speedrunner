@@ -99,3 +99,21 @@ MonoBehaviour:
     loop: 1
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
+  - name: Boss Music
+    clip: {fileID: 8300000, guid: 22f534a0ae8d0cd4ebaf118042c0b720, type: 3}
+    volume: 1
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: Menu Music
+    clip: {fileID: 8300000, guid: 0cfe7aaaba8297e439a246bea151b642, type: 3}
+    volume: 1
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0
+    loop: 1
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}

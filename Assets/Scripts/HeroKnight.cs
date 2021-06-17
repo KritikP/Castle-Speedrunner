@@ -12,12 +12,11 @@ public class HeroKnight : MonoBehaviour {
     [SerializeField] GameObject slideDust;
     [SerializeField] GameObject attackHitbox;
     [SerializeField] LayerMask  enemyLayer;
-    [SerializeField] private Controls controls;
-    [SerializeField] private PlayerInput input;
 
+    private PlayerInput         input;
     private AudioManager        audioManager;
     private ContactFilter2D     contactFilter2d;
-    private Animator            animator;
+    public Animator            animator;
     private Rigidbody2D         body2d;
     private BoxCollider2D       boxCollider2d;
     private Player_Health       playerHealth;
@@ -50,17 +49,18 @@ public class HeroKnight : MonoBehaviour {
         body2d = GetComponent<Rigidbody2D>();
         boxCollider2d = GetComponent<BoxCollider2D>();
         playerHealth = GetComponent<Player_Health>();
+        input = GetComponent<PlayerInput>();
         groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_HeroKnight>();
         wallSensorR1 = transform.Find("WallSensor_R1").GetComponent<Sensor_HeroKnight>();
         wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
-        audioManager = FindObjectOfType<AudioManager>();
     }
 
     // Use this for initialization
     void Start ()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         contactFilter2d = new ContactFilter2D();
         contactFilter2d.SetLayerMask(enemyLayer);
         Physics2D.IgnoreLayerCollision(9, 10);  //Ignore collisions between dead enemies and player
@@ -71,6 +71,7 @@ public class HeroKnight : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(12, 12);  //Ignore collisions between hitboxes
 
         audioManager.Play("Level Music");
+        audioManager.Stop("Menu Music");
 
         player.stamina = player.maxStamina;
     }
@@ -83,6 +84,7 @@ public class HeroKnight : MonoBehaviour {
             player.currentRoom += 2;
         }
 
+        input.enabled = animator.GetBool("DEBUG_canMove");
         // Increase timer that controls attack combo
         timeSinceAttack += Time.deltaTime;
         timeSinceRoll += Time.deltaTime;

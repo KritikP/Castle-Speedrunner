@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Sword Upgrade
   description: Increase attack damage
   price: 190000003200000064000000
-  level: 0
+  level: 3
   itemImage:
   - {fileID: 21300000, guid: 15a16a26dc6d89846bf746a7abf540f2, type: 3}
   - {fileID: 21300000, guid: 30114157808daee4bbfcc48235039d8e, type: 3}

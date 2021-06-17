@@ -22,9 +22,9 @@ public class RangedShot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (1 << other.gameObject.layer == attackingLayerMask)
+        if (1 << other.gameObject.layer == attackingLayerMask && other.GetComponent<IDamagable>() != null)
         {
-            if (other.GetComponent<IDamagable>() != null)
+            if (!playerData.invincible)
             {
                 other.GetComponent<IDamagable>().TakeDamage(damage);
                 animator.SetTrigger("Hit");

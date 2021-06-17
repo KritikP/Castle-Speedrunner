@@ -580,7 +580,7 @@ public class LevelCreation : MonoBehaviour
 
     private void CreateBossRoom(MapSection map)
     {
-        map.SetEnemy(map.width - 8, 2, bossEnemiesList[0], map.mapArray);
+        map.SetEnemy(map.width / 2 - 2, 2, bossEnemiesList[0], map.mapArray);
     }
 
     private void AddBossRoom()

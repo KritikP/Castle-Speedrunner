@@ -13,6 +13,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected Rigidbody2D body2d;
     protected Collider2D[] colliders;
     protected GameObject[] powerUpsList;
+    protected AudioManager audioManager;
 
     protected ContactFilter2D playerFilter;
     protected float fade = 1f;
@@ -53,7 +54,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
         StartCoroutine(HitFlash());
     }
 
-    protected void CheckForDeath()
+    protected virtual void CheckForDeath()
     {
         if (health <= 0)
         {
@@ -97,6 +98,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
     protected virtual void InitEnemy()
     {
+        audioManager = FindObjectOfType<AudioManager>();
         objectPooler = ObjectPooler.Instance;
         rand = new System.Random();
         powerUpsList = Resources.LoadAll<GameObject>("Prefabs/PowerUps");

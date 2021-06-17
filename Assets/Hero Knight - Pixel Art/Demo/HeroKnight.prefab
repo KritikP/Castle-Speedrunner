@@ -236,6 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 11400000, guid: e13674d5e6a82654984b359a45fe38c5, type: 2}
+  mapData: {fileID: 11400000, guid: c9afdc969ba719e4eb2191f4a81e1782, type: 2}
   noBlood: 0
   slideDust: {fileID: 1038168246061390451, guid: 8b8c8cc6774fb074cb9139cc631b108e,
     type: 3}
@@ -243,7 +244,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
-  input: {fileID: 0}
+  animator: {fileID: 2655505060201611074}
 --- !u!95 &2655505060201611074
 Animator:
   serializedVersion: 3

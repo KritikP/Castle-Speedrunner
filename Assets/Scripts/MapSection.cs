@@ -100,7 +100,7 @@ public class MapSection
     {
         if (obj.width + x > width - 3 || obj.height + y > height - 3)
         {
-            Debug.LogWarning("Object " + obj.name + " too big for specified location (" + x + ", " + y + ")");
+            //Debug.LogWarning("Object " + obj.name + " too big for specified location (" + x + ", " + y + ")");
             return -1;
         }
 

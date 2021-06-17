@@ -7,8 +7,11 @@ public class GameUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject shop;
     [SerializeField] private GameObject gameoverMenu;
+    [SerializeField] private GameObject deathText;
+    [SerializeField] private GameObject victoryText;
     [SerializeField] private GameObject canvas;
     [SerializeField] private Player_Data playerData;
+    private SceneLoader sceneLoader;
     private float canvasWidth;
     private float canvasHeight;
 
@@ -16,6 +19,7 @@ public class GameUIManager : MonoBehaviour
     {
         canvasWidth = canvas.GetComponent<RectTransform>().rect.width;
         canvasHeight = canvas.GetComponent<RectTransform>().rect.height;
+        sceneLoader = FindObjectOfType<SceneLoader>();
     }
 
     public void OpenGameOverMenu()
@@ -78,13 +82,20 @@ public class GameUIManager : MonoBehaviour
         OpenGameOverMenu();
     }
 
+    public void Victory()
+    {
+        OpenGameOverMenu();
+        deathText.SetActive(false);
+        victoryText.SetActive(true);
+    }
+
     public void TryAgain()
     {
-        SceneManager.LoadScene(1);
+        sceneLoader.LoadLevel();
     }
 
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene(0);
+        sceneLoader.LoadMenu();
     }
 }
