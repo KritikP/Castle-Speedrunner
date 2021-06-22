@@ -751,14 +751,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\FantomMusic\Demo\Scripts\SimpleMusicPlayer.cs" />
     <Compile Include="Assets\Hero Knight - Pixel Art\ColorSwap\ColorSwap_HeroKnight.cs" />
     <Compile Include="Assets\Input System\Controls.cs" />
     <Compile Include="Assets\Scripts\AttackSensor.cs" />
-    <Compile Include="Assets\Scripts\BackgroundAnimation.cs" />
     <Compile Include="Assets\Scripts\Coin.cs" />
     <Compile Include="Assets\Scripts\CollisionSensor.cs" />
-    <Compile Include="Assets\Scripts\ContinuousAttackSensor.cs" />
+    <Compile Include="Assets\Scripts\DataManager.cs" />
     <Compile Include="Assets\Scripts\DestroyEvent_HeroKnight.cs" />
     <Compile Include="Assets\Scripts\EnemyAI\AI_Bat.cs" />
     <Compile Include="Assets\Scripts\EnemyAI\AI_Boss.cs" />
@@ -773,10 +771,12 @@
     <Compile Include="Assets\Scripts\LevelCreation.cs" />
     <Compile Include="Assets\Scripts\MapSection.cs" />
     <Compile Include="Assets\Scripts\ObjectPooler.cs" />
+    <Compile Include="Assets\Scripts\OnScreenButton.cs" />
     <Compile Include="Assets\Scripts\Player_Health.cs" />
     <Compile Include="Assets\Scripts\PowerUp.cs" />
     <Compile Include="Assets\Scripts\RangedShot.cs" />
     <Compile Include="Assets\Scripts\SceneLoader.cs" />
+    <Compile Include="Assets\Scripts\ScreenButton.cs" />
     <Compile Include="Assets\Scripts\Scriptable Objects\Enemies\Enemy_Data.cs" />
     <Compile Include="Assets\Scripts\Scriptable Objects\Map_Data.cs" />
     <Compile Include="Assets\Scripts\Scriptable Objects\Player_Data.cs" />
@@ -785,6 +785,7 @@
     <Compile Include="Assets\Scripts\Scriptable Objects\TileObjects.cs" />
     <Compile Include="Assets\Scripts\Scriptable Objects\TileObjectsList.cs" />
     <Compile Include="Assets\Scripts\Sensor_HeroKnight.cs" />
+    <Compile Include="Assets\Scripts\SetVolume.cs" />
     <Compile Include="Assets\Scripts\ShopItemDisplay.cs" />
     <Compile Include="Assets\Scripts\Sound\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Sound\Sound.cs" />
@@ -832,8 +833,8 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\FantomMusic\Music\SongList.txt" />
     <None Include="Assets\Hero Knight - Pixel Art\ColorSwap\Sprites-ColorSwap.shader" />
+    <None Include="Assets\Materials\Sprite-Lit-Default.shader" />
     <None Include="Assets\Sound\Music\ReadMe.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />

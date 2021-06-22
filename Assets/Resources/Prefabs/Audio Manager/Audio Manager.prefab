@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344daff4b797a6a4f863e0dcddfa1838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mixerGroup: {fileID: 0}
+  mixerGroup: {fileID: 24300002, guid: 3f28743e64cbf6f43a582bf11a55b69e, type: 2}
   sounds:
   - name: swing1
     clip: {fileID: 8300000, guid: 2989a4a11ba7328489649f6deff789b8, type: 3}

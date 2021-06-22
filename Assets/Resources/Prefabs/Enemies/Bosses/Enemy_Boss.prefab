@@ -1209,6 +1209,9 @@ MonoBehaviour:
   healthBar: {fileID: 241229456}
   flashMat: {fileID: 2100000, guid: 623e86c4414f5bc419d72da91f88bab5, type: 3}
   hitboxes: {fileID: 2619332455549496201}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 2048
   sensors: {fileID: 6554115229247269818}
   hitboxesColliders: []
   bodyCollider: {fileID: 649071809}

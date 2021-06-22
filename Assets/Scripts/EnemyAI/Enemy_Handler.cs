@@ -11,7 +11,6 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     protected Animator animator;
     protected SpriteRenderer spriteData;
     protected Rigidbody2D body2d;
-    protected Collider2D[] colliders;
     protected GameObject[] powerUpsList;
     protected AudioManager audioManager;
 
@@ -40,7 +39,7 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
     [SerializeField] protected GameObject hitboxes;
 
     protected LayerMask playerMask;
-    protected LayerMask groundMask;
+    [SerializeField] protected LayerMask groundMask;
     protected System.Random rand;
 
     protected int room;
@@ -111,7 +110,6 @@ public abstract class Enemy_Handler : MonoBehaviour, IDamagable
 
         animator = GetComponent<Animator>();
         spriteData = GetComponent<SpriteRenderer>();
-        colliders = GetComponents<Collider2D>();
         body2d = GetComponent<Rigidbody2D>();
 
         health = enemyData.maxHealth;

@@ -21,6 +21,7 @@ public class LevelCreation : MonoBehaviour
     [SerializeField] private Player_Data player;
 
     [SerializeField] private TileObjectsList tileObjects;
+    private Tile blackTile;
     private GameObject[] enemiesList;
     private GameObject[] bossEnemiesList;
 
@@ -617,6 +618,16 @@ public class LevelCreation : MonoBehaviour
         RenderMapHelper(map, map.mapArray, groundTilemap);
         RenderMapHelper(map, map.backgroundArray, backgroundTilemap);
         RenderMapHelper(map, map.decorationsArray, backgroundDecorationTilemap);
+
+        //Space beyond the stage
+        for (int x = map.basePosition.x; x < map.width + map.basePosition.x; x++)
+        {
+            for (int y = 0; y < 8; y++)
+            {
+                backgroundTilemap.SetTile(new Vector3Int(x, y + height, 0), blackTile);
+                backgroundTilemap.SetTile(new Vector3Int(x, -y, 0), blackTile);
+            }
+        }
     }
 
     private void RenderMapHelper(MapSection map, MapTile[] arr, Tilemap tilemap)
@@ -667,7 +678,7 @@ public class LevelCreation : MonoBehaviour
     {
         enemiesList = Resources.LoadAll<GameObject>("Prefabs/Enemies/Standard Enemies");
         bossEnemiesList = Resources.LoadAll<GameObject>("Prefabs/Enemies/Bosses");
-
+        blackTile = Resources.Load<Tile>("Tiles/Black_Square");
         objectPooler = ObjectPooler.Instance;
 
         glowTile1 = (GameObject)Resources.Load("Lighting/Freeform Light 2D_GlowTile1");
@@ -689,7 +700,7 @@ public class LevelCreation : MonoBehaviour
 
         AddSpikeRoom();
 
-        for(int i = 0; i < 9; i++)
+        for (int i = 0; i < 9; i++)
         {
             AddTransitionRoom();
             if (rand.Next(0, 2) == 1)
@@ -704,5 +715,15 @@ public class LevelCreation : MonoBehaviour
 
         AddTransitionRoom();
         AddBossRoom();
+
+        for(int x = startingPosition.x - 13; x < startingPosition.x; x++)
+        {
+            for(int y = startingPosition.y - 7; y < height + 8; y++)
+            {
+                backgroundTilemap.SetTile(new Vector3Int(x, y, 0), blackTile);
+                backgroundTilemap.SetTile(new Vector3Int(mapData.mapSections[mapData.mapSections.Count - 1].basePosition.x + mapData.mapSections[mapData.mapSections.Count - 1].width + 6 + x, y, 0), blackTile);
+            }
+        }
+
     }
 }

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   maxHealth: 100
-  health: 100
+  health: -100
   maxStamina: 100
   staminaRecoverySpeed: 35
-  stamina: 100
+  stamina: 67
   invincible: 0
   isBlocking: 0
   rolling: 0
@@ -33,7 +33,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
-  isDead: 0
+  currentRoom: 0
+  isDead: 1
   coins: 0
   armorUpgrade: {fileID: 11400000, guid: fa3c2d485cb2b25439564b42f032bbd4, type: 2}
   attackUpgrade: {fileID: 11400000, guid: b4739a5921dc1d846a2caaa77f9e84f7, type: 2}

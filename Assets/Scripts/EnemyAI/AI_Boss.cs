@@ -8,6 +8,7 @@ public class AI_Boss : Enemy_Handler
     [SerializeField] private Collider2D[] hitboxesColliders;
     [SerializeField] private Collider2D bodyCollider;
     private HeroKnight player;
+    private ContactFilter2D groundFilter;
     private bool battleBegun = false;
 
     protected override void InitEnemy()
@@ -15,6 +16,8 @@ public class AI_Boss : Enemy_Handler
         base.InitEnemy();
         player = FindObjectOfType<HeroKnight>();
         hitboxesColliders = hitboxes.GetComponentsInChildren<Collider2D>();
+        groundFilter = new ContactFilter2D();
+        groundFilter.SetLayerMask(groundMask);
     }
 
     protected override void CheckForDeath()
@@ -170,7 +173,7 @@ public class AI_Boss : Enemy_Handler
 
     public void AttackRandomGround()
     {
-       if(rand.Next(0, 2) == 0)
+       if (rand.Next(0, 2) == 0)
        {
             StartBaseAttack();
        }
@@ -182,6 +185,10 @@ public class AI_Boss : Enemy_Handler
 
     public void AttackRandomJump()
     {
+        Collider2D[] cols = new Collider2D[5];
+        if (hitboxesColliders[4].OverlapCollider(groundFilter, cols) > 0)
+            return;
+
         if (rand.Next(0, 2) == 0)
         {
             StartLeapAttack();

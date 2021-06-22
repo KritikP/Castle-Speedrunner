@@ -10,6 +10,8 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private GameObject deathText;
     [SerializeField] private GameObject victoryText;
     [SerializeField] private GameObject canvas;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject OnScreenControls;
     [SerializeField] private Player_Data playerData;
     private SceneLoader sceneLoader;
     private float canvasWidth;
@@ -20,6 +22,15 @@ public class GameUIManager : MonoBehaviour
         canvasWidth = canvas.GetComponent<RectTransform>().rect.width;
         canvasHeight = canvas.GetComponent<RectTransform>().rect.height;
         sceneLoader = FindObjectOfType<SceneLoader>();
+
+        if (Application.isMobilePlatform)
+        {
+            OnScreenControls.SetActive(true);
+        }
+        else
+        {
+            OnScreenControls.SetActive(false);
+        }
     }
 
     public void OpenGameOverMenu()
@@ -97,5 +108,20 @@ public class GameUIManager : MonoBehaviour
     public void ReturnToMenu()
     {
         sceneLoader.LoadMenu();
+    }
+
+    public void PauseGame()
+    {
+        if (pauseMenu.activeInHierarchy)
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        
     }
 }

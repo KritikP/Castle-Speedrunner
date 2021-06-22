@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class HeroKnight : MonoBehaviour {
 
@@ -16,7 +17,7 @@ public class HeroKnight : MonoBehaviour {
     private PlayerInput         input;
     private AudioManager        audioManager;
     private ContactFilter2D     contactFilter2d;
-    public Animator            animator;
+    public Animator             animator;
     private Rigidbody2D         body2d;
     private BoxCollider2D       boxCollider2d;
     private Player_Health       playerHealth;
@@ -70,16 +71,19 @@ public class HeroKnight : MonoBehaviour {
         Physics2D.IgnoreLayerCollision(9, 9);  //Ignore collisions between dead enemies
         Physics2D.IgnoreLayerCollision(12, 12);  //Ignore collisions between hitboxes
 
-        audioManager.StopAll();
+        audioManager.Stop("Menu Music");
         audioManager.Play("Level Music");
     }
 
     // Update is called once per frame
     void Update ()
     {
-        if(transform.position.x > mapData.mapSections[player.currentRoom].basePosition.x + mapData.mapSections[player.currentRoom].width + 2)
+        if(mapData.mapSections.Count > 0)
         {
-            player.currentRoom += 2;
+            if (transform.position.x > mapData.mapSections[player.currentRoom].basePosition.x + mapData.mapSections[player.currentRoom].width + 2)
+            {
+                player.currentRoom += 2;
+            }
         }
 
         input.enabled = animator.GetBool("DEBUG_canMove");
@@ -136,6 +140,7 @@ public class HeroKnight : MonoBehaviour {
             {
                 attackHitbox.transform.localPosition = new Vector2(attackHitbox.transform.localPosition.x * -1, attackHitbox.transform.localPosition.y);
                 boxCollider2d.offset = new Vector2(-boxCollider2d.offset.x, boxCollider2d.offset.y);
+                groundSensor.gameObject.transform.Rotate(new Vector3(0, 180, 0));
             }
 
             // Move

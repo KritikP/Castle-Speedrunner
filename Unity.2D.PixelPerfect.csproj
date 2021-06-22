@@ -242,6 +242,12 @@
     <Reference Include="UnityEditor.WebGL.Extensions">
       <HintPath>E:/Program Files/2019.4.1f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.OSXStandalone.Extensions">
+      <HintPath>E:/Program Files/2019.4.1f1/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.Android.Extensions">
+      <HintPath>E:/Program Files/2019.4.1f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.UWP.Extensions">
       <HintPath>E:/Program Files/2019.4.1f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll</HintPath>
     </Reference>
@@ -616,8 +622,8 @@
     <Compile Include="Packages\com.unity.2d.pixel-perfect\Runtime\PixelPerfectCameraInternal.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\FantomMusic\Music\SongList.txt" />
     <None Include="Assets\Hero Knight - Pixel Art\ColorSwap\Sprites-ColorSwap.shader" />
+    <None Include="Assets\Materials\Sprite-Lit-Default.shader" />
     <None Include="Assets\Sound\Music\ReadMe.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />

@@ -177,7 +177,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.04343438, y: 0.1}
-  m_Size: {x: 0.8300001, y: 0.06501389}
+  m_Size: {x: 0.7923117, y: 0.06501391}
   m_Direction: 1
 --- !u!1 &6323719953710832613
 GameObject:
@@ -476,6 +476,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 3047f007-9e6f-4ffc-aefb-89850740e29a
     m_ActionName: Player/Block[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 20c60522-ab09-4f89-aef4-6acac3728eac
+    m_ActionName: Player/Pause[/Keyboard/p]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

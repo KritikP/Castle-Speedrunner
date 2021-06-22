@@ -16,7 +16,6 @@ public class SceneLoader : MonoBehaviour
         {
             audioManager.StopAll();
             audioManager.Play("Menu Music");
-            //audioManager.Stop("Level Music");
         }
     }
 
@@ -34,6 +33,7 @@ public class SceneLoader : MonoBehaviour
     {
         animator.SetTrigger("Start");
         yield return new WaitForSeconds(transitionTime);
+        audioManager.Stop("Menu Music");
         SceneManager.LoadScene(levelIndex);
     }
 
